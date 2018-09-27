@@ -88,7 +88,7 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             v.conditionGroups = l.data$v.conditionGroups,
                             v.tissueGroups = l.data$v.tissueGroups,
                             n.cpus = 3,
-                            b.load_codifferentialAnalysis_monteCarloSimulation = "no",
+                            b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
                             pvalue_DifferentialExpression = 0.05,
                             probability_codifferentialExpression_MonteCarloSimulation = 0.05,
                             pvalue_coexpression_distribution = 0.05,
