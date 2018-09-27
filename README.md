@@ -41,13 +41,13 @@ Load datasets parameters:
 
 ```
 l.data = load_datasets(input_format = "PCF2017",
-                       filename.genes = "/data/genes.txt",
-                       filename.experiment_series_ids = "/data/experiment_series_ids.txt",
-                       filename.condition_groups = "/data/conditionGroups.txt",
-                       filename.geneCluster = "/data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
-                       filename.foldChange_differentialExpression =      "/data/m.foldChange_differentialExpression.txt",
-                       filename.pvalue_differentialExpression =	"/data/m.pvalue_differentialExpression.txt",
-                       filename.experiment_condition_tissue_annotation =	"/data/experiment_series_annotation_He_et_al_2015.txt")
+                       filename.genes = "data/genes.txt",
+                       filename.experiment_series_ids = "data/experiment_series_ids.txt",
+                       filename.condition_groups = "data/conditionGroups.txt",
+                       filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
+                       filename.foldChange_differentialExpression =      "data/m.foldChange_differentialExpression.txt",
+                       filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
+                       filename.experiment_condition_tissue_annotation =	"data/experiment_series_annotation_He_et_al_2015.txt")
 ```
 
 
