@@ -6,7 +6,7 @@ METACLUSTER facilitates comprehensive condition and tissue-specific functionalit
 [Contact the author](mailto:mbanf.research@gmail.com) in case you've found a bug. 
 
 ## Installation
-The easiest way to install `METACLUSTER` is through `devtools`
+The easiest way to install `METACLUSTER` is through `devtools` (see OS specific notes at the bottom of the page)
 
 ```
 library(devtools)
@@ -122,4 +122,8 @@ Gene cluster functionality annotation for the Schlapfer et al. 2017 A.thaliana g
 ## Notes
 
 We are currently compiling a set of helper functions to assist with compiling differential expression matrices (fold change and p-value)
+
+Installation of devtools dependencies under Ubuntu (prior to installing devtools):
+
+sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
 
