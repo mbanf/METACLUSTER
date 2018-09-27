@@ -6,7 +6,7 @@ METACLUSTER facilitates comprehensive condition and tissue-specific functionalit
 [Contact the author](mailto:mbanf.research@gmail.com) in case you've found a bug. 
 
 ## Installation
-The easiest way to install `METACLUSTER` is through `devtools` (see OS specific notes at the bottom of the page)
+The easiest way to install `METACLUSTER` is through `devtools` (see OS specific notes on installing devtools at the end)
 
 ```
 library(devtools)
@@ -114,16 +114,18 @@ evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotatio
 ```
 
 
-Gene cluster functionality annotation for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data
+Gene cluster functionality annotation inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data
 
+![Alt text](/C666_3.jpg?raw=true "coexpression map")
+
+Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C666 from Schlapfer et al. 2017
 ![Alt text](/functionality.jpg?raw=true "functionality map")
-
 
 ## Notes
 
 We are currently compiling a set of helper functions to assist with compiling differential expression matrices (fold change and p-value)
 
-Installation of devtools dependencies under Ubuntu (prior to installing devtools):
 
+Installation of devtools dependencies under Ubuntu (prior to installing devtools):
 sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
 
