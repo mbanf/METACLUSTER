@@ -50,8 +50,10 @@ l.data = load_datasets(input_format = "PCF2017",
                        filename.experiment_condition_tissue_annotation =	"data/experiment_series_annotation_He_et_al_2015.txt")
 ```
 
-
 METACLUSTER Parameter sets:
+
+!We set b.load_codifferentialAnalysis_monteCarloSimulation = "yes" for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data, as we have pre-computed and provided all co-differential expression datasets - for other datasets, set to "no"!
+
 
 * `m.foldChange_differentialExpression` differential expression foldchange matrix - rows are genes, cols are experiments
 * `m.pvalue_differentialExpression` differential expression pvalue matrix - rows are genes, cols are experiments
