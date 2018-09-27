@@ -115,11 +115,11 @@ evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotatio
 
 
 Gene cluster functionality annotation inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data
+![Alt text](/functionality.jpg?raw=true "functionality map")
 
-![Alt text](/C666_3.jpg?raw=true "coexpression map")
 
 Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C666 from Schlapfer et al. 2017
-![Alt text](/functionality.jpg?raw=true "functionality map")
+![Alt text](/C666_3.jpg?raw=true "coexpression map")
 
 ## Notes
 
