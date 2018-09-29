@@ -72,7 +72,7 @@ METACLUSTER Parameter sets:
 * `pvalue_geneClusterConsistency` pvalue gene cluster enzyme condition consistency (default = 0.05)
 * `pvalue_treatment_per_condition` pvalue gene pair condition annotation (default = 0.05)
 * `pvalue_tissue_per_condition` pvalue gene pair tissue annotation (default = 0.05)
-* `th.consistent_condition_presence_percentage` percentage of enyzmes with similar annotation per gene cluster (default = 0.95)
+* `th.consistent_condition_presence_percentage` percentage of enyzmes with similar annotation per gene cluster (default = 0.8)
 * `min_number_of_genes` min number of enzymes per gene cluster (default = 3)
 * `number_codifferentialExpression_MonteCarloSimulations` number of codiffernetial expression background monte carlo simulations (default = 3)
 * `number_conditionSpecificCoexpressionBackgroundGenePairs` number of context specific coexpression simulation background gene pairs (default = 50)
