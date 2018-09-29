@@ -8,6 +8,55 @@ trim.trailing <- function (x) sub("\\s+$", "", x)
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
+
+perform_significance_tests = function(n.sig.enz.counter = 200, n.enz_predicted = 1179){
+  
+  
+  message("signature enzyme enrichment - compare among enzymes")
+  n.sigEnzymes <- length(which(l.data$df.geneCluster$Gene.Name != ""))
+  n.enz <- nrow(l.data$df.geneCluster)
+  
+  
+  # compare the number of coe
+  
+  n.background <- n.enz
+  hitInSample <- n.sig.enz.counter
+  sampleSize <- n.enz_predicted
+  hitInPop <-  n.sigEnzymes  
+  failInPop <- n.background - hitInPop
+  
+  foldChange <- (hitInSample / sampleSize) / (hitInPop / n.background)
+  foldChange
+  p.val <- print(phyper(hitInSample, hitInPop, failInPop, sampleSize, lower.tail= FALSE))
+  
+  print(foldChange)
+  print(p.val)
+
+  message("Schlapfer et al. high confidence overlap")
+  
+  
+  df.Schlapfer_hc = read.table("data/high_confidence_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt", header = T, sep ="\t", stringsAsFactors = F)
+  v.gcs_predicted = unique(l.results$df.cluster_annotations$cluster.ID)
+  v.clusters.highConfidence = unique(df.Schlapfer_hc$ClusterID)
+  
+  n.background <- length(unique(l.data$df.geneCluster$Cluster.ID))
+  hitInSample <- length(intersect(v.clusters.highConfidence, v.gcs_predicted))
+  sampleSize <- length(v.gcs_predicted)
+  hitInPop <-  length(v.clusters.highConfidence)  
+  failInPop <- n.background - hitInPop
+  
+  foldChange <- (hitInSample / sampleSize) / (hitInPop / n.background)
+  foldChange
+  
+  p.val <- print(phyper(hitInSample, hitInPop, failInPop, sampleSize, lower.tail= FALSE))
+  
+  print(hitInSample)
+  print(p.val)
+  
+  
+}
+
+
 #' Load dependency function
 #'
 #' This function installs or loads dependencies needed
@@ -207,17 +256,16 @@ save_pheatmap_pdf <- function(x, filename, width=7, height=7) {
 #' This function analysis the results
 #' @param df.cluster_annotations inferred cluster condition annotations 
 #' @param m.functionality gene cluster acitivity heatmap
-#' @param width.heatmap
-#' @param height.heatmap
+#' @param heatmap_height
+#' @param heatmap_height
 #' @keywords 
 #' @export
 #' @examples
 #' cat_function()
 evaluate_and_store_results = function(df.cluster_annotations=df.cluster_annotations,
                                       m.functionality=m.functionality,
-                                      foldername.results = "results/",
-                                      width.heatmap = 7,
-                                      height.heatmap = 7){
+                                      heatmap_width = 10, heatmap_height = 6,
+                                      foldername.results = "results/"){
               
   
   write.table(df.cluster_annotations, paste(foldername.results, "/df.cluster_annotations.txt", sep = ""), row.names = F, sep = "\t")
@@ -248,7 +296,13 @@ evaluate_and_store_results = function(df.cluster_annotations=df.cluster_annotati
   color <- c("black",  "orange" ,colorRampPalette(c( "orange", "red"))(length(breaks) - 1))
   
   # plot pdf 3.5 - 9
-  p = pheatmap(m.heatmap, color = color, breaks = breaks, border_color = "orange",  show_rownames = T, show_colnames = T , cluster_rows = F, cluster_cols = F, treeheight_row = 0, treeheight_col = 0)#fontsize = 1)
-  save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_number_of_clusters.pdf", sep = ""), width=width.heatmap, height=height.heatmap)
+  p = pheatmap(m.heatmap, color = color, breaks = breaks, border_color = "orange",  show_rownames = T, show_colnames = T , cluster_rows = F, cluster_cols = F, treeheight_row = 0, treeheight_col = 0,
+               main = "Gene cluster condition functionality map \n (colors indicate numbers of clusters active per condition)")#fontsize = 1)
+  save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_number_of_clusters.pdf", sep = ""), width=heatmap_width, height=heatmap_height)
+                    
 
 }
+
+
+
+

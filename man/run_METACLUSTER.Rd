@@ -21,11 +21,12 @@
   pvalue_geneClusterConsistency = 0.05,
   pvalue_treatment_per_condition = 0.05,
   pvalue_tissue_per_condition = 0.05,
-  th.consistent_condition_presence_percentage = 0.95,
+  th.consistent_condition_presence_percentage = 0.8,
   min_number_of_genes = 3,
   number_codifferentialExpression_MonteCarloSimulations = 3,
   number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
-  min_number_condition_samples = 1, foldername.tmp = "tmp/",
+  min_number_condition_samples = 1, heatmap_width = 10,
+  heatmap_height = 6, foldername.tmp = "tmp/",
   foldername.results = "results/")
 }
 \arguments{
@@ -63,7 +64,7 @@
 
 \item{pvalue_tissue_per_condition}{pvalue gene pair tissue annotation (default = 0.05)}
 
-\item{th.consistent_condition_presence_percentage}{percentag of enyzmes with similar annotation per gene cluster (default = 0.95)}
+\item{th.consistent_condition_presence_percentage}{percentage of enyzmes with similar annotation per gene cluster (default = 0.8)}
 
 \item{min_number_of_genes}{min number of enzymes per gene cluster (default = 3)}
 
@@ -72,6 +73,10 @@
 \item{number_conditionSpecificCoexpressionBackgroundGenePairs}{number of context specific coexpression simulation background gene pairs (default = 50)}
 
 \item{min_number_condition_samples}{minimum number of condition samples for significance test (default 1)}
+
+\item{heatmap_width}{default = 10}
+
+\item{heatmap_height}{default = 5}
 
 \item{foldername.tmp}{temp file folder name (default = /tmp)}
 
@@ -119,11 +124,12 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             pvalue_geneClusterConsistency = 0.05,
                             pvalue_treatment_per_condition = 0.05,
                             pvalue_tissue_per_condition = 0.05,
-                            th.consistent_condition_presence_percentage = 0.95,
+                            th.consistent_condition_presence_percentage = 0.8,
                             min_number_of_genes = 3,
                             number_codifferentialExpression_MonteCarloSimulations = 3,
                             number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
                             min_number_condition_samples = 1,
+                            heatmap_width = 10, heatmap_height = 5,
                             foldername.tmp = "tmp/", 
                             foldername.results = "results/")
                             
@@ -131,5 +137,6 @@ print(head(l.results$df.cluster_annotations))
 
 evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotations,
                            m.functionality=l.results$m.functionality, 
+                           heatmap_width = 10, heatmap_height = 5,
                            foldername.results = "results/")
 }

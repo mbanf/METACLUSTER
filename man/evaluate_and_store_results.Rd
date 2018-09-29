@@ -6,8 +6,8 @@
 \usage{
 
   evaluate_and_store_results(df.cluster_annotations = df.cluster_annotations,
-  m.functionality = m.functionality, foldername.results = "results/",
-  width.heatmap = 7, height.heatmap = 7)
+  m.functionality = m.functionality, heatmap_width = 10,
+  heatmap_height = 6, foldername.results = "results/")
 }
 \arguments{
 \item{df.cluster_annotations}{inferred cluster condition annotations}

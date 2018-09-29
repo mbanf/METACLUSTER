@@ -84,7 +84,8 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                                           b.choseSimilarConditionInSimulation = TRUE,
                                           b.signatureEnzymeAnalysis = FALSE,
                                           b.prepare = TRUE, v.rho_random.gene_pairs = NULL,
-                                          foldername.results=foldername.results){
+                                          foldername.results=foldername.results,
+                                          heatmap_width = 10, heatmap_height = 10){
   
   
   diag(m.co_diff) = 0
@@ -467,10 +468,10 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                             # 
                             #m.heatmap <- m.functionality.i
                             #m.heatmap <- m.heatmap[which(rowSums(m.heatmap) > 0), which(colSums(m.heatmap) > 0)]
-                            p <- pheatmap((m.heatmap), cluster_rows = FALSE,cluster_cols = FALSE, color = c("black", "white"), legend = FALSE) 
-                            save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_percentage_enzymes_per_cluster_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=7, height=4)
-                            
-                        
+                            p <- pheatmap((m.heatmap), cluster_rows = FALSE,cluster_cols = FALSE, color = c("black", "white"), legend = FALSE,
+                                          main = paste("Condition activity map of gene cluster ", v.gcs[i], "\n (white indicates activity in condition)", sep = ""))
+                            save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=heatmap_width, height=heatmap_height)
+                      
                             #### enzyme coexpression map 
                             
                             v.gns_plus_names <- paste(gns.i, " (" ,v.gn.names[gns.i], ")", sep = "")
@@ -487,10 +488,11 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                             
                             m.coexpression.i <- m.coexpression.i + t(m.coexpression.i)
                             
-                            p <- pheatmap(m.coexpression.i, cluster_rows = FALSE,cluster_cols = FALSE) 
-                            save_pheatmap_pdf(p, paste(foldername.results, "/coexpression_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=6, height=6)
+                            p <- pheatmap(m.coexpression.i, cluster_rows = FALSE,cluster_cols = FALSE, legend = TRUE, 
+                                          main = paste("Enzyme coexpression map of gene cluster ", v.gcs[i], "\n (colors indicate Pearson's correlation values)", sep = ""))
+                            save_pheatmap_pdf(p, paste(foldername.results, "/coexpression_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=heatmap_width, height=heatmap_height)
+                                              
 
-                            
                             # functionality map - pvalue 
                             m.functionality.i[m.functionality.i > 0] <- 1
                             m.functionality <- m.functionality + m.functionality.i # global cluster 
@@ -543,13 +545,16 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
 #' @param pvalue_geneClusterConsistency pvalue gene cluster enzyme condition consistency (default = 0.05)
 #' @param pvalue_treatment_per_condition pvalue gene pair condition annotation (default = 0.05)
 #' @param pvalue_tissue_per_condition pvalue gene pair tissue annotation (default = 0.05)
-#' @param th.consistent_condition_presence_percentage percentag of enyzmes with similar annotation per gene cluster (default = 0.95)
+#' @param th.consistent_condition_presence_percentage percentage of enyzmes with similar annotation per gene cluster (default = 0.8)
 #' @param min_number_of_genes min number of enzymes per gene cluster (default = 3)
 #' @param number_codifferentialExpression_MonteCarloSimulations number of codiffernetial expression background monte carlo simulations (default = 3)
 #' @param number_conditionSpecificCoexpressionBackgroundGenePairs number of context specific coexpression simulation background gene pairs (default = 50)
 #' @param min_number_condition_samples minimum number of condition samples for significance test (default 1)
 #' @param foldername.tmp temp file folder name (default = /tmp)
 #' @param foldername.results results file folder name (default = /results)
+#' @param heatmap_width default = 10
+#' @param heatmap_height default = 5
+#' 
 #' 
 #' @return a list of results
 #' @keywords 
@@ -590,11 +595,12 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
 #'                             pvalue_geneClusterConsistency = 0.05,
 #'                             pvalue_treatment_per_condition = 0.05,
 #'                             pvalue_tissue_per_condition = 0.05,
-#'                             th.consistent_condition_presence_percentage = 0.95,
+#'                             th.consistent_condition_presence_percentage = 0.8,
 #'                             min_number_of_genes = 3,
 #'                             number_codifferentialExpression_MonteCarloSimulations = 3,
 #'                             number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
 #'                             min_number_condition_samples = 1,
+#'                             heatmap_width = 10, heatmap_height = 5,
 #'                             foldername.tmp = "tmp/", 
 #'                             foldername.results = "results/")
 #'                             
@@ -602,6 +608,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
 #' 
 #' evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotations,
 #'                            m.functionality=l.results$m.functionality, 
+#'                            heatmap_width = 10, heatmap_height = 5,
 #'                            foldername.results = "results/")
 run_METACLUSTER = function(m.foldChange_differentialExpression=m.foldChange_differentialExpression,
                           m.pvalue_differentialExpression = m.pvalue_differentialExpression,
@@ -620,11 +627,12 @@ run_METACLUSTER = function(m.foldChange_differentialExpression=m.foldChange_diff
                           pvalue_geneClusterConsistency = 0.05,
                           pvalue_treatment_per_condition = 0.05,
                           pvalue_tissue_per_condition = 0.05,
-                          th.consistent_condition_presence_percentage = 0.95,
+                          th.consistent_condition_presence_percentage = 0.8,
                           min_number_of_genes = 3,
                           number_codifferentialExpression_MonteCarloSimulations = 3,
                           number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
                           min_number_condition_samples = 1,
+                          heatmap_width = 10, heatmap_height = 6,
                           foldername.tmp = "tmp/",
                           foldername.results = "results/"){
 
@@ -639,8 +647,8 @@ run_METACLUSTER = function(m.foldChange_differentialExpression=m.foldChange_diff
     dir.create(foldername.results)
   }
   
-  if(!file.exists(paste(foldername.results, "/condition_activity_percentage_enzymes_per_cluster_heatmaps/", sep = ""))){
-    dir.create(paste(foldername.results, "/condition_activity_percentage_enzymes_per_cluster_heatmaps/", sep = ""))
+  if(!file.exists(paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", sep = ""))){
+    dir.create(paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", sep = ""))
   }
   if(!file.exists(paste(foldername.results, "/coexpression_heatmaps/", sep = ""))){
     dir.create(paste(foldername.results, "/coexpression_heatmaps/", sep = ""))
@@ -783,7 +791,8 @@ run_METACLUSTER = function(m.foldChange_differentialExpression=m.foldChange_diff
                                                            b.choseSimilarConditionInSimulation = TRUE,
                                                            b.signatureEnzymeAnalysis = FALSE,
                                                            b.prepare = TRUE, v.rho_random.gene_pairs = NULL,
-                                                           foldername.results=foldername.results)
+                                                           foldername.results=foldername.results,
+                                                           heatmap_width = heatmap_width, heatmap_height = heatmap_height)
   
   
   message("compute gene cluster condition specific coexpression ... ")
@@ -810,7 +819,8 @@ run_METACLUSTER = function(m.foldChange_differentialExpression=m.foldChange_diff
                                          b.choseSimilarConditionInSimulation = TRUE,
                                          b.signatureEnzymeAnalysis = FALSE,
                                          b.prepare = FALSE, v.rho_random.gene_pairs = v.rho_random.gene_pairs,
-                                         foldername.results=foldername.results)
+                                         foldername.results=foldername.results,
+                                         heatmap_width = heatmap_width, heatmap_height = heatmap_height)
 
   
   return(l.results)
