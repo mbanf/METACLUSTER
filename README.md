@@ -116,8 +116,8 @@ evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotatio
 ```
 
 
-Gene cluster functionality annotation inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data
-![Alt text](/functionality.jpg?raw=true "functionality map")
+A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition).
+![Alt text](/figure1.jpg?raw=true "functionality map")
 
 
 Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C666 from Schlapfer et al. 2017
