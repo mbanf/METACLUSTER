@@ -6,7 +6,9 @@
 \usage{
 
   evaluate_and_store_results(df.cluster_annotations = df.cluster_annotations,
-  m.functionality = m.functionality, heatmap_width = 10,
+  df.experiment_condition_annotation = df.experiment_condition_annotation,
+  m.functionality = m.functionality, v.gc_validated = c("C628_3",
+  "C463_3", "C615_3", "C641_3"), heatmap_width = 10,
   heatmap_height = 6, foldername.results = "results/")
 }
 \arguments{

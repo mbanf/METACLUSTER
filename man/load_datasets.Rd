@@ -5,8 +5,7 @@
 \title{Load dataset function}
 \usage{
 load_datasets(input_format = "PCF2017", filename.genes = "",
-  filename.experiment_series_ids = "", filename.condition_groups = "",
-  filename.geneCluster = "",
+  filename.experiment_series_ids = "", filename.geneCluster = "",
   filename.foldChange_differentialExpression = "",
   filename.pvalue_differentialExpression = "",
   filename.experiment_condition_tissue_annotation = "")
@@ -18,8 +17,6 @@ load_datasets(input_format = "PCF2017", filename.genes = "",
 
 \item{filename.experiment_series_ids}{experimental datasets (columns of the expression datasets)}
 
-\item{filename.condition_groups}{treatment and tissue to condition maps}
-
 \item{filename.geneCluster}{filename gene clusters}
 
 \item{filename.foldChange_differentialExpression}{differential expression data (fold changes)}
@@ -27,6 +24,8 @@ load_datasets(input_format = "PCF2017", filename.genes = "",
 \item{filename.pvalue_differentialExpression}{differential expression data (p-values)}
 
 \item{filename.experiment_condition_tissue_annotation}{experiment to treatment and tissue annotation}
+
+\item{filename.condition_groups}{treatment and tissue to condition maps}
 }
 \description{
 This function loads a datasets

@@ -10,22 +10,20 @@
   df.experiment_condition_annotation = df.experiment_condition_annotation,
   df.geneCluster = df.geneCluster,
   tb.condition_treatments = tb.condition_treatments,
-  tb.condition_tissues = tb.condition_tissues,
-  v.conditionGroups = v.conditionGroups,
-  v.tissueGroups = v.tissueGroups, n.cpus = 3,
+  tb.condition_tissues = tb.condition_tissues, n.cpus = 3,
   b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
   pvalue_DifferentialExpression = 0.05,
-  probability_codifferentialExpression_MonteCarloSimulation = 0.05,
+  probability_codifferentialExpression_MonteCarloSimulation = 0.95,
   pvalue_coexpression_distribution = 0.05,
   pvalue_geneClusterPrediction = 0.05,
   pvalue_geneClusterConsistency = 0.05,
   pvalue_treatment_per_condition = 0.05,
   pvalue_tissue_per_condition = 0.05,
-  th.consistent_condition_presence_percentage = 0.8,
+  th.consistent_condition_presence_percentage = 0.95,
   min_number_of_genes = 3,
   number_codifferentialExpression_MonteCarloSimulations = 3,
-  number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
-  min_number_condition_samples = 1, heatmap_width = 10,
+  number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
+  min_number_condition_samples = 1, seed = 1234, heatmap_width = 10,
   heatmap_height = 6, foldername.tmp = "tmp/",
   foldername.results = "results/")
 }
@@ -41,10 +39,6 @@
 \item{tb.condition_treatments}{table of conditions}
 
 \item{tb.condition_tissues}{table of tissues}
-
-\item{v.conditionGroups}{treatment and condition map}
-
-\item{v.tissueGroups}{tissue maps}
 
 \item{n.cpus}{number of cores used}
 
@@ -81,6 +75,10 @@
 \item{foldername.tmp}{temp file folder name (default = /tmp)}
 
 \item{foldername.results}{results file folder name (default = /results)}
+
+\item{v.conditionGroups}{treatment and condition map}
+
+\item{v.tissueGroups}{tissue maps}
 }
 \value{
 a list of results
@@ -100,11 +98,10 @@ message("load datasets")
 l.data = load_datasets(input_format = "PCF2017",
                        filename.genes = "data/genes.txt",
                        filename.experiment_series_ids = "data/experiment_series_ids.txt",
-                       filename.condition_groups = "data/conditionGroups.txt",
                        filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
                        filename.foldChange_differentialExpression = "data/m.foldChange_differentialExpression.txt",
                        filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
-                       filename.experiment_condition_tissue_annotation =	"data/experiment_series_annotation_He_et_al_2015.txt")
+                       filename.experiment_condition_tissue_annotation ="data/df.experiment_condition_annotation.txt")
 
 message("run METACLUSTER")
 l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldChange_differentialExpression,
@@ -113,23 +110,23 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             df.geneCluster = l.data$df.geneCluster,
                             tb.condition_treatments = l.data$tb.condition_treatments,
                             tb.condition_tissues = l.data$tb.condition_tissues,
-                            v.conditionGroups = l.data$v.conditionGroups,
-                            v.tissueGroups = l.data$v.tissueGroups,
                             n.cpus = 3,
                             b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
                             pvalue_DifferentialExpression = 0.05,
-                            probability_codifferentialExpression_MonteCarloSimulation = 0.05,
+                            probability_codifferentialExpression_MonteCarloSimulation = 0.95,
                             pvalue_coexpression_distribution = 0.05,
                             pvalue_geneClusterPrediction = 0.05,
                             pvalue_geneClusterConsistency = 0.05,
                             pvalue_treatment_per_condition = 0.05,
                             pvalue_tissue_per_condition = 0.05,
-                            th.consistent_condition_presence_percentage = 0.8,
+                            th.consistent_condition_presence_percentage = 0.95,
                             min_number_of_genes = 3,
                             number_codifferentialExpression_MonteCarloSimulations = 3,
-                            number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
+                            number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
                             min_number_condition_samples = 1,
-                            heatmap_width = 10, heatmap_height = 5,
+                            seed = 1234,
+                            heatmap_width = 10, 
+                            heatmap_height = 5,
                             foldername.tmp = "tmp/", 
                             foldername.results = "results/")
                             
