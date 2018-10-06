@@ -33,7 +33,6 @@ Load datasets parameters:
 * `input_format` "custom" or "PCF2017" (default = "PCF2017")
 * `filename.genes` genes (rows of the expression datasets)
 * `filename.experiment_series_ids` experimental datasets (columns of the expression datasets)
-* `filename.condition_groups` treatment and tissue to condition maps
 * `filename.geneCluster` filename gene clusters
 * `filename.foldChange_differentialExpression` differential expression data (fold changes)
 * `filename.pvalue_differentialExpression`  differential expression data (p-values)
@@ -43,11 +42,10 @@ Load datasets parameters:
 l.data = load_datasets(input_format = "PCF2017",
                        filename.genes = "data/genes.txt",
                        filename.experiment_series_ids = "data/experiment_series_ids.txt",
-                       filename.condition_groups = "data/conditionGroups.txt",
                        filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
-                       filename.foldChange_differentialExpression =      "data/m.foldChange_differentialExpression.txt",
+                       filename.foldChange_differentialExpression = "data/m.foldChange_differentialExpression.txt",
                        filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
-                       filename.experiment_condition_tissue_annotation =	"data/experiment_series_annotation_He_et_al_2015.txt")
+                       filename.experiment_condition_tissue_annotation ="data/df.experiment_condition_annotation.txt")
 ```
 
 METACLUSTER Parameter sets:
@@ -92,7 +90,7 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             n.cpus = 3,
                             b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
                             pvalue_DifferentialExpression = 0.05,
-                            probability_codifferentialExpression_MonteCarloSimulation = 0.05,
+                            probability_codifferentialExpression_MonteCarloSimulation = 0.95,
                             pvalue_coexpression_distribution = 0.05,
                             pvalue_geneClusterPrediction = 0.05,
                             pvalue_geneClusterConsistency = 0.05,
@@ -101,8 +99,11 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             th.consistent_condition_presence_percentage = 0.95,
                             min_number_of_genes = 3,
                             number_codifferentialExpression_MonteCarloSimulations = 3,
-                            number_conditionSpecificCoexpressionBackgroundGenePairs = 50,
+                            number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
                             min_number_condition_samples = 1,
+                            seed = 1234,
+                            heatmap_width = 10,
+                            heatmap_height = 5,
                             foldername.results = "results/",
                             foldername.tmp = "tmp/")
 ```
@@ -111,17 +112,22 @@ Next evaluate and store the results
 ```
 print(head(l.results$df.cluster_annotations))
 evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotations,
+                           df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
                            m.functionality=l.results$m.functionality, 
+                           heatmap_width = 10, heatmap_height = 5,
                            foldername.results = "results/")
 ```
 
 
-A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition).
+A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
 ![Alt text](/figure1.jpg?raw=true "functionality map")
 
 
-Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C666 from Schlapfer et al. 2017
-![Alt text](/C666_3.jpg?raw=true "coexpression map")
+Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C641 from Schlapfer et al. 2017
+![Alt text](/C641_coexpression.jpg?raw=true "coexpression map")
+
+Gene cluster context specific functionality heatmap inferred by METACLUSTER of the C641 from Schlapfer et al. 2017
+![Alt text](/C641_functionality.jpg?raw=true "coexpression map")
 
 ## Notes
 
