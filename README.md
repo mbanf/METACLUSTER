@@ -15,7 +15,7 @@ install_github("METACLUSTER","mbanf")
 
 ## Usage
 
-To run the METACLUSTER with the Schlapfer et al. 2017 A.thaliana gene cluster predictions data you can download all neccessary datasets from onedrive: [datasets_athaliana_w_gencluster_schlapfer2017](https://1drv.ms/u/s!Avm82Xhe9EZj1hZIx-rGjPvQwHhF)
+To run the METACLUSTER with the Schlapfer et al. 2017 A.thaliana gene cluster predictions data you can download all neccessary datasets from onedrive: [datasets_athaliana_w_gencluster_schlapfer2017](https://1drv.ms/u/s!Avm82Xhe9EZj1hmw9mVVIGN4y0ep)
 
 
 ```
