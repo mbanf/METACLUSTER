@@ -59,8 +59,6 @@ METACLUSTER Parameter sets:
 * `df.geneCluster` gene cluster dataset
 * `tb.condition_treatments` table of conditions
 * `tb.condition_tissues` table of tissues
-* `v.conditionGroups` treatment and condition map
-* `v.tissueGroups` tissue maps 
 * `n.cpus` number of cores used
 * `b.load_codifferentialAnalysis_monteCarloSimulation` load codifferential expression data ("yes", "no")
 * `pvalue_DifferentialExpression` pvalue treshold for differential expession (default = 0.05)
@@ -85,8 +83,6 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             df.geneCluster = l.data$df.geneCluster,
                             tb.condition_treatments = l.data$tb.condition_treatments,
                             tb.condition_tissues = l.data$tb.condition_tissues,
-                            v.conditionGroups = l.data$v.conditionGroups,
-                            v.tissueGroups = l.data$v.tissueGroups,
                             n.cpus = 3,
                             b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
                             pvalue_DifferentialExpression = 0.05,
