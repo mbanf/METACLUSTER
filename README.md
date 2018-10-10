@@ -127,9 +127,6 @@ Gene cluster context specific functionality heatmap inferred by METACLUSTER of t
 
 ## Notes
 
-We are currently compiling a set of helper functions to assist with compiling differential expression matrices (fold change and p-value)
-
-
 Installation of devtools dependencies under Ubuntu (prior to installing devtools):
 sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
 
