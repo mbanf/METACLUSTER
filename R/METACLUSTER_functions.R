@@ -87,7 +87,6 @@ install_and_load_libraries <- function(){
 #' @param input_format "custom" or "PCF2017" (default = "PCF2017")
 #' @param filename.genes genes (rows of the expression datasets)
 #' @param filename.experiment_series_ids experimental datasets (columns of the expression datasets)
-#' @param filename.condition_groups treatment and tissue to condition maps
 #' @param filename.geneCluster filename gene clusters
 #' @param filename.foldChange_differentialExpression differential expression data (fold changes)
 #' @param filename.pvalue_differentialExpression  differential expression data (p-values)
