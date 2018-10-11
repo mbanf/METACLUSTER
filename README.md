@@ -3,7 +3,7 @@
 ## About
 METACLUSTER facilitates comprehensive condition and tissue-specific functionality analysis of metabolic gene clusters based on a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information
 
-[Contact the author](mailto:mbanf.research@gmail.com) in case you've found a bug. 
+[Contact](mailto:mbanf.research@gmail.com) in case you've found a bug. 
 
 ## Installation
 The easiest way to install `METACLUSTER` is through `devtools` (see OS specific notes on installing devtools at the end)
