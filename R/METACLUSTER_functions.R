@@ -247,9 +247,9 @@ save_pheatmap_pdf <- function(x, filename, width=7, height=7) {
 #' @export
 #' @examples
 #' cat_function()
-evaluate_and_store_results = function(df.cluster_annotations=df.cluster_annotations,
-                                      df.experiment_condition_annotation = df.experiment_condition_annotation,
-                                      m.functionality=m.functionality,
+evaluate_and_store_results = function(df.cluster_annotations,
+                                      df.experiment_condition_annotation,
+                                      m.functionality,
                                       v.gc_validated = c("C628_3", "C463_3", "C615_3", "C641_3"),
                                       heatmap_width = 10, heatmap_height = 6,
                                       foldername.results = "results/"){
