@@ -4,13 +4,10 @@
 \alias{run_METACLUSTER}
 \title{run Metacluster algorithm}
 \usage{
-
-  run_METACLUSTER(m.foldChange_differentialExpression = m.foldChange_differentialExpression,
-  m.pvalue_differentialExpression = m.pvalue_differentialExpression,
-  df.experiment_condition_annotation = df.experiment_condition_annotation,
-  df.geneCluster = df.geneCluster,
-  tb.condition_treatments = tb.condition_treatments,
-  tb.condition_tissues = tb.condition_tissues, n.cpus = 3,
+run_METACLUSTER(m.foldChange_differentialExpression,
+  m.pvalue_differentialExpression, df.experiment_condition_annotation,
+  df.geneCluster, tb.condition_treatments, tb.condition_tissues,
+  n.cpus = 3,
   b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
   pvalue_DifferentialExpression = 0.05,
   probability_codifferentialExpression_MonteCarloSimulation = 0.95,
@@ -133,6 +130,7 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
 print(head(l.results$df.cluster_annotations))
 
 evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotations,
+                           df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
                            m.functionality=l.results$m.functionality, 
                            heatmap_width = 10, heatmap_height = 5,
                            foldername.results = "results/")

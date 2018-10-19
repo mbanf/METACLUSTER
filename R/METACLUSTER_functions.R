@@ -31,7 +31,7 @@ perform_significance_tests = function(n.sig.enz.counter = 177,
   
   print(foldChange)
   print(p.val)
-
+  
   message("Schlapfer et al. high confidence overlap")
   
   df.Schlapfer_hc = read.table("data/high_confidence_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt", header = T, sep ="\t", stringsAsFactors = F)
@@ -103,16 +103,16 @@ load_datasets = function(input_format = "PCF2017",
                          filename.pvalue_differentialExpression =	"",
                          filename.experiment_condition_tissue_annotation =	""){
   
-
+  
   df.geneCluster = load_gene_cluster_data(filename.geneCluster=filename.geneCluster, input_format=input_format)
-
+  
   genes = read.table(filename.genes, header = F, sep = "\t", stringsAsFactors = F)[,1]
   experiment_series_ids = read.table(filename.experiment_series_ids, header = F, sep = "\t", stringsAsFactors = F)[,1]
   
   df.annotation = read.table(filename.experiment_condition_tissue_annotation, sep = "\t", stringsAsFactors = F, header = T)
   df.foldChange_differentialExpression = read.table(filename.foldChange_differentialExpression, header = F, sep = "\t", stringsAsFactors = F)
   df.pvalue_differentialExpression = read.table(filename.pvalue_differentialExpression, header = F, sep = "\t", stringsAsFactors = F)
-
+  
   if(length(genes) == 0){
     stop("Error: no genes found")
   }
@@ -128,18 +128,18 @@ load_datasets = function(input_format = "PCF2017",
   if(nrow(df.pvalue_differentialExpression) == 0){
     stop("Error: no differential expression pvalue found")
   }
-
-
+  
+  
   m.foldChange_differentialExpression = data.matrix(df.foldChange_differentialExpression, rownames.force = NA)
   m.pvalue_differentialExpression     = data.matrix(df.pvalue_differentialExpression, rownames.force = NA)
   rownames(m.foldChange_differentialExpression) = rownames(m.pvalue_differentialExpression) = genes
   colnames(m.foldChange_differentialExpression) = colnames(m.pvalue_differentialExpression) = experiment_series_ids
-
+  
   v.tissues = unique(df.annotation$condition_tissue)
   v.treatments = unique(c(df.annotation$condition_treatment_1, df.annotation$condition_treatment_2))
   v.treatments = v.treatments[!v.treatments == ""]
   tb.experiment_series_ids = table(experiment_series_ids)
-
+  
   df.annotation["number_series"] = 0
   for(i in 1:nrow(df.annotation)){
     df.annotation$number_series[i] = tb.experiment_series_ids[df.annotation$series_id[i]]
@@ -173,7 +173,7 @@ load_datasets = function(input_format = "PCF2017",
               tb.condition_tissues=tb.condition_tissues))
   
 }
-  
+
 
 
 #' Load gene cluster Function
@@ -253,7 +253,7 @@ evaluate_and_store_results = function(df.cluster_annotations,
                                       v.gc_validated = c("C628_3", "C463_3", "C615_3", "C641_3"),
                                       heatmap_width = 10, heatmap_height = 6,
                                       foldername.results = "results/"){
-              
+  
   
   write.table(df.cluster_annotations, paste(foldername.results, "/df.cluster_annotations.txt", sep = ""), row.names = F, sep = "\t")
   
@@ -274,14 +274,14 @@ evaluate_and_store_results = function(df.cluster_annotations,
   message("# signature enzymes predicted: ", sig.enz.counter)
   
   
- 
+  
   print(v.gc_validated[which(v.gc_validated %in% v.gcs_predicted)])
   
   message("plot functionality map")
   
   # m.functionality <- m.functionality[rowSums(m.functionality) > 0, colSums(m.functionality) > 0]
   
-
+  
   m.functionality <- m.functionality[sort(rownames(m.functionality)), sort(colnames(m.functionality))]
   
   m.availability = matrix(-1, nrow = nrow(m.functionality), ncol = ncol(m.functionality), dimnames = list(rownames(m.functionality), colnames(m.functionality)))
@@ -293,7 +293,7 @@ evaluate_and_store_results = function(df.cluster_annotations,
       m.availability[df.experiment_condition_annotation$condition_treatment_2[i], df.experiment_condition_annotation$condition_tissue[i]] = 1
     }
   }
-
+  
   
   for(i in 1:nrow(m.availability)){
     for(j in 1:ncol(m.availability)){
@@ -315,10 +315,9 @@ evaluate_and_store_results = function(df.cluster_annotations,
   
   
   save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_number_of_clusters.pdf", sep = ""), width=heatmap_width, height=heatmap_height)
-                    
-
+  
+  
 }
-
 
 
 

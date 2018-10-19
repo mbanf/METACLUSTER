@@ -97,7 +97,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
   diag(m.co_diff) = 0
   hitInPop <- length(which(m.co_diff >= th.min_overlap))
   popSize <- dim(m.co_diff)[1] * dim(m.co_diff)[2]
- 
+  
   p.prior.codiff <- hitInPop / popSize
   
   if(b.signatureEnzymeAnalysis){
@@ -106,7 +106,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
   }
   
   m.functionality <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups), dimnames = list(v.conditionGroups, v.tissueGroups))
-                          
+  
   tb.series_ids <- colSums(abs(m.de.ternary))
   v.gns <- rownames(m.de.ternary)
   
@@ -131,7 +131,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
   
   p.sig.genes.clusters <- rep(1,length(v.gcs))
   names(p.sig.genes.clusters) <- v.gcs
-
+  
   # compute gene expression significance cutoff
   if(!b.prepare){
     l.treatments <- list()
@@ -151,7 +151,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
   
   # estimate gene cluster rank 
   for(i in 1:length(v.gcs)){ # per gene cluster
-  
+    
     df.geneCluster.i <- subset(df.geneCluster, df.geneCluster$Cluster.ID == v.gcs[i])
     gns.i <- intersect(df.geneCluster.i$Gene.ID, v.gns) # genes on the microarray chip
     
@@ -171,7 +171,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
         p.sig.genes.clusters[i] <- binom.test(n.sig, (n.sig + n.bg), p = p.prior)$p.value
         
       }
-  
+      
       # co-differential expression sets (across conditions)
       m.gc.i <- m.co_diff[gns.i, gns.i]
       diag(m.gc.i) <- 0
@@ -183,7 +183,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
         n.codiff_pairs <-  nrow(i.gc_pairs)
         n.all_pairs <- length(gns.i) * (length(gns.i) - 1) / 2 # in cluster 
         p.cluster.codiff <- binom.test(n.codiff_pairs, n.all_pairs, p = p.prior.codiff, alternative ="greater")$p.value
-          
+        
         # correlation analysis (across conditions)
         # correlation threshold on sub-condition groups
         v.rho.gene_pairs <- numeric(nrow(i.gc_pairs))
@@ -233,10 +233,10 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
           i.rho <- which(v.rho.gene_pairs >= th.abs_rho)
           
           if(length(i.rho) > 0){ # initial pairs need to be above threshold 
-
+            
             df.rho <- df.rho[i.rho,]
             v.gns.rho <- unique(c(df.rho$gn.1, df.rho$gn.2))
-           
+            
             # sort by the coexpression values
             v.gns.rho <- unique(c(df.rho$gn.1, df.rho$gn.2))
             df.geneCluster.rho <- subset(df.geneCluster.i, df.geneCluster.i$Gene.ID %in% v.gns.rho)
@@ -248,7 +248,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
             n.coex_pairs <-  nrow(df.rho)
             n.all_pairs <- length(gns.i) * (length(gns.i) - 1) / 2
             # n.non_coex_pairs <- n.all_pairs - n.coex_pairs
-        
+            
             p.cluster.coex <- binom.test(n.coex_pairs, n.codiff_pairs, p = p.mu, alternative ="greater")$p.value
             
             if(b.signatureEnzymeAnalysis){
@@ -307,7 +307,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                 # number of enzymes instead of genomes
                 pvals.tmts[j] <- phyper(hitInSample, hitInPop, failInPop, sampleSize, lower.tail = FALSE)
               }
-            
+              
               # identify significant treatment and tissue sets 
               pvals.tmts <- p.adjust(pvals.tmts, s.multipleHypthesisCorrection)
               i.set <- which(pvals.tmts < th.p.cluster)
@@ -316,7 +316,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                 
                 tb.fc.sets.significant <- tb.fc.sets[i.set]
                 l.genes_per_sets.significant <- l.genes_per_sets[i.set]
-           
+                
                 p.prior <- s.series[names(tb.fc.sets.significant)] / n.gns.total
                 p.conds <- sapply(1:length(tb.fc.sets.significant), 
                                   function(i) binom.test(as.integer(tb.fc.sets.significant[i]), 
@@ -340,174 +340,174 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                     p.all_gns_in_each_condition <- sumlog(p.all_gns_in_each_condition)$p
                   }
                   
-             
+                  
                   p.cluster <- sumlog(c(p.cluster.codiff, p.cluster.coex, p.all_gns_in_each_condition))$p
                   
-                    if(p.cluster <= th.p.cluster){
-                  
-                      tb.series.set = table(names(tb.fc.sets.significant))
-                      series.set = names(tb.series.set)
-                      
-                      # TRANSFORM treatments, tissues to CONDITIONS (treatment super groups and tissue super groups)
-                      df.annotation.j <- subset(df.annotation.j, df.annotation.j$series_id %in% series.set)
-    
-                      ####
-                      
-                      tb.treatments.j <- numeric(length(v.conditionGroups))
-                      names(tb.treatments.j) = v.conditionGroups
-                      for(j in 1:length(series.set)){
-                        df.annotation.ij = subset(df.annotation.j, df.annotation.j$series_id == series.set[j])
-                        condition_treatment_1 = df.annotation.ij$condition_treatment_1
-                        condition_treatment_1 = condition_treatment_1[condition_treatment_1 != ""]
-                        if(length(condition_treatment_1) > 0){
-                          tb.treatments.j[v.conditionGroups[condition_treatment_1]] = tb.treatments.j[v.conditionGroups[condition_treatment_1]] + tb.series.set[series.set[j]]
-                        }
-                        condition_treatment_2 = df.annotation.ij$condition_treatment_2
-                        condition_treatment_2 = condition_treatment_2[condition_treatment_2 != ""]
-                        if(length(condition_treatment_2) > 0){
-                          tb.treatments.j[v.conditionGroups[condition_treatment_2]] = tb.treatments.j[v.conditionGroups[condition_treatment_2]] + tb.series.set[series.set[j]]
-                        }
+                  if(p.cluster <= th.p.cluster){
+                    
+                    tb.series.set = table(names(tb.fc.sets.significant))
+                    series.set = names(tb.series.set)
+                    
+                    # TRANSFORM treatments, tissues to CONDITIONS (treatment super groups and tissue super groups)
+                    df.annotation.j <- subset(df.annotation.j, df.annotation.j$series_id %in% series.set)
+                    
+                    ####
+                    
+                    tb.treatments.j <- numeric(length(v.conditionGroups))
+                    names(tb.treatments.j) = v.conditionGroups
+                    for(j in 1:length(series.set)){
+                      df.annotation.ij = subset(df.annotation.j, df.annotation.j$series_id == series.set[j])
+                      condition_treatment_1 = df.annotation.ij$condition_treatment_1
+                      condition_treatment_1 = condition_treatment_1[condition_treatment_1 != ""]
+                      if(length(condition_treatment_1) > 0){
+                        tb.treatments.j[v.conditionGroups[condition_treatment_1]] = tb.treatments.j[v.conditionGroups[condition_treatment_1]] + tb.series.set[series.set[j]]
                       }
-                      tb.treatments.j = tb.treatments.j[tb.treatments.j > 0]
-                     
-                      ###
+                      condition_treatment_2 = df.annotation.ij$condition_treatment_2
+                      condition_treatment_2 = condition_treatment_2[condition_treatment_2 != ""]
+                      if(length(condition_treatment_2) > 0){
+                        tb.treatments.j[v.conditionGroups[condition_treatment_2]] = tb.treatments.j[v.conditionGroups[condition_treatment_2]] + tb.series.set[series.set[j]]
+                      }
+                    }
+                    tb.treatments.j = tb.treatments.j[tb.treatments.j > 0]
+                    
+                    ###
+                    
+                    if(length(tb.treatments.j) > 0){
                       
-                      if(length(tb.treatments.j) > 0){
-                       
-                        # identify significant treatments
-                        tb.conditions_treatments.significant <- do_treatment_filtering_single_gene_pair(tb.treatments.j, tb.condition_treatments, th.pval.treatment, th.min.samples = th.min.samples, s.multipleTestCorrection = "none")
+                      # identify significant treatments
+                      tb.conditions_treatments.significant <- do_treatment_filtering_single_gene_pair(tb.treatments.j, tb.condition_treatments, th.pval.treatment, th.min.samples = th.min.samples, s.multipleTestCorrection = "none")
+                      
+                      # remove all links without 
+                      if(length(tb.conditions_treatments.significant) > 0){
                         
-                        # remove all links without 
-                        if(length(tb.conditions_treatments.significant) > 0){
+                        ## Step 2 - assign dominant tissues to these conditions 
+                        i.set <- which(v.conditionGroups[df.annotation.j$condition_treatment_1] %in% names(tb.conditions_treatments.significant))
+                        i.set <- unique(c(i.set, which(v.conditionGroups[df.annotation.j$condition_treatment_2] %in% names(tb.conditions_treatments.significant))))
+                        
+                        # tb.tissues.j <- table(df.annotation.j$tissue)
+                        tb.tissues.j <- table(df.annotation.j$condition_tissue[i.set]) # tissue annotations all treatments 
+                        
+                        l.conditions_treatment_and_tissue <- vector(mode = "list", length = length(tb.conditions_treatments.significant))
+                        names(l.conditions_treatment_and_tissue) <- names(tb.conditions_treatments.significant)
+                        
+                        # dominant treatment filter per link
+                        for(t in 1:length(tb.conditions_treatments.significant)){ 
                           
-                          ## Step 2 - assign dominant tissues to these conditions 
-                          i.set <- which(v.conditionGroups[df.annotation.j$condition_treatment_1] %in% names(tb.conditions_treatments.significant))
-                          i.set <- unique(c(i.set, which(v.conditionGroups[df.annotation.j$condition_treatment_2] %in% names(tb.conditions_treatments.significant))))
+                          l.conditions_treatment_and_tissue[[t]] <- character()
                           
-                          # tb.tissues.j <- table(df.annotation.j$tissue)
-                          tb.tissues.j <- table(df.annotation.j$condition_tissue[i.set]) # tissue annotations all treatments 
+                          # which conditionset 
+                          i.set <- which(v.conditionGroups[df.annotation.j$condition_treatment_1] == names(tb.conditions_treatments.significant)[t])
+                          i.set <- unique(c(i.set, which(v.conditionGroups[df.annotation.j$condition_treatment_2] == names(tb.conditions_treatments.significant)[t])))
                           
-                          l.conditions_treatment_and_tissue <- vector(mode = "list", length = length(tb.conditions_treatments.significant))
-                          names(l.conditions_treatment_and_tissue) <- names(tb.conditions_treatments.significant)
+                          df.annotation.jt = df.annotation.j[i.set,]
+                          tissues.t = unique(df.annotation.jt$condition_tissue)
                           
-                          # dominant treatment filter per link
-                          for(t in 1:length(tb.conditions_treatments.significant)){ 
+                          tb.tissues_per_treatment = numeric(length(tissues.t))
+                          names(tb.tissues_per_treatment) = tissues.t
+                          
+                          for(k in 1:length(tissues.t)){
+                            df.annotation.jtk = subset(df.annotation.jt, df.annotation.jt$condition_tissue == tissues.t[k])
+                            tb.tissues_per_treatment[k] = sum(tb.series.set[df.annotation.jtk$series_id])
+                          }
+                          
+                          tb.tissues_per_treatment <- evaluate_tissues_per_treatment(tb.tissues_per_treatment,  tb.condition_tissues, 
+                                                                                     th.pval.tissue = th.pval.tissue, 
+                                                                                     th.min.samples = th.min.samples, 
+                                                                                     s.multipleTestCorrection = "none")
+                          
+                          
+                          # if significant tissues for treatment are found
+                          if(length(tb.tissues_per_treatment) > 0){
+                            l.conditions_treatment_and_tissue[[t]] <- names(tb.tissues_per_treatment)
+                          }
+                        }
+                        
+                        idx.treatment <- which(sapply(l.conditions_treatment_and_tissue, function(m) length(m) > 0) == TRUE)
+                        
+                        if(length(idx.treatment) > 0){
+                          
+                          
+                          rank.i <- - (log(p.cluster.codiff) + log(p.cluster.coex) + log(p.all_gns_in_each_condition)) # rank only if cluster is selected
+                          
+                          
+                          
+                          #v.rank.clusters[i] <- rank.i
+                          # v.n.genepairs.clusters[i] <- nrow(df.rho) # totoal number of gene cluster enzymes
+                          
+                          
+                          # list with individual (multiple) tissue elements
+                          l.conditions_treatment_and_tissue <- l.conditions_treatment_and_tissue[idx.treatment]
+                          
+                          m.functionality.i <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups), 
+                                                      dimnames = list(v.conditionGroups, v.tissueGroups))
+                          
+                          df.cluster_annotations.i <- c()
+                          
+                          # treatment and tissue annotations with at least th.min of genes 
+                          for(t in 1:length(l.conditions_treatment_and_tissue)){
                             
-                            l.conditions_treatment_and_tissue[[t]] <- character()
+                            t.set <- unique(c(which(v.conditionGroups[df.annotation.j$condition_treatment_1] == names(l.conditions_treatment_and_tissue)[t]),
+                                              which(v.conditionGroups[df.annotation.j$condition_treatment_2] == names(l.conditions_treatment_and_tissue)[t])))
                             
-                            # which conditionset 
-                            i.set <- which(v.conditionGroups[df.annotation.j$condition_treatment_1] == names(tb.conditions_treatments.significant)[t])
-                            i.set <- unique(c(i.set, which(v.conditionGroups[df.annotation.j$condition_treatment_2] == names(tb.conditions_treatments.significant)[t])))
-                      
-                            df.annotation.jt = df.annotation.j[i.set,]
-                            tissues.t = unique(df.annotation.jt$condition_tissue)
-                            
-                            tb.tissues_per_treatment = numeric(length(tissues.t))
-                            names(tb.tissues_per_treatment) = tissues.t
-                            
-                            for(k in 1:length(tissues.t)){
-                              df.annotation.jtk = subset(df.annotation.jt, df.annotation.jt$condition_tissue == tissues.t[k])
-                              tb.tissues_per_treatment[k] = sum(tb.series.set[df.annotation.jtk$series_id])
-                            }
-                            
-                            tb.tissues_per_treatment <- evaluate_tissues_per_treatment(tb.tissues_per_treatment,  tb.condition_tissues, 
-                                                                                         th.pval.tissue = th.pval.tissue, 
-                                                                                         th.min.samples = th.min.samples, 
-                                                                                         s.multipleTestCorrection = "none")
-                            
-
-                            # if significant tissues for treatment are found
-                            if(length(tb.tissues_per_treatment) > 0){
-                              l.conditions_treatment_and_tissue[[t]] <- names(tb.tissues_per_treatment)
+                            for(k in 1:length(l.conditions_treatment_and_tissue[[t]])){
+                              
+                              k.set <- which(df.annotation.j$condition_tissue == l.conditions_treatment_and_tissue[[t]][k])
+                              
+                              tk.set <- intersect(t.set, k.set) # treatment and tissue
+                              series.id.tk <- df.annotation.j$series_id[tk.set]
+                              
+                              # identify all enzymes according 
+                              v.gns.tk <- unique(unlist(l.genes_per_sets.significant[series.id.tk]))
+                              m.functionality.i[names(l.conditions_treatment_and_tissue)[t], l.conditions_treatment_and_tissue[[t]][k]] <- 1 #length(v.gns.tk) # round(length(v.gns.tk) / length(gns.i) * 100,1)
+                              
+                              #df.cluster_annotations.j <- data.frame()
+                              
+                              v.gn.names <- df.geneCluster.i$Gene.Name
+                              names(v.gn.names) <- df.geneCluster.i$Gene.ID  
+                              
+                              
+                              # treatment and tissue annotations with at least th.min of genes 
+                              df.cluster_annotations.j <- data.frame(cluster.ID = v.gcs[i],
+                                                                     rank = rank.i,
+                                                                     number_of_enzymes_total = length(gns.i),
+                                                                     
+                                                                     number_of_coexpressed_enzymes = length(unique(c(df.rho$gn.1, df.rho$gn.2))),
+                                                                     percentage_of_coexpressed_enzymes =  round(length(unique(c(df.rho$gn.1, df.rho$gn.2))) / length(gns.i) * 100,1),
+                                                                     
+                                                                     ###
+                                                                     
+                                                                     condition_treatment =  names(l.conditions_treatment_and_tissue)[t],
+                                                                     condition_tissue =  l.conditions_treatment_and_tissue[[t]][k],
+                                                                     
+                                                                     number_of_coexpressed_enzymes_in_condition = length(v.gns.tk),
+                                                                     percentage_of_coexpressed_enzymes_in_condition = round(length(v.gns.tk) / length(gns.i) * 100,1),
+                                                                     ids_of_coexpressed_enzymes_in_condition =paste(v.gns.tk, collapse = " / "),
+                                                                     
+                                                                     
+                                                                     names_of_enzymes_in_condition = paste(v.gn.names[v.gns.tk], collapse = " / "))
+                              
+                              df.cluster_annotations.i <- rbind(df.cluster_annotations.i, df.cluster_annotations.j)
+                              
                             }
                           }
                           
-                          idx.treatment <- which(sapply(l.conditions_treatment_and_tissue, function(m) length(m) > 0) == TRUE)
                           
-                          if(length(idx.treatment) > 0){
-                            
+                          df.cluster_annotations <- rbind(df.cluster_annotations, df.cluster_annotations.i)
                           
-                            rank.i <- - (log(p.cluster.codiff) + log(p.cluster.coex) + log(p.all_gns_in_each_condition)) # rank only if cluster is selected
-                            
-                            
-                             
-                            #v.rank.clusters[i] <- rank.i
-                            # v.n.genepairs.clusters[i] <- nrow(df.rho) # totoal number of gene cluster enzymes
-                            
-                            
-                            # list with individual (multiple) tissue elements
-                            l.conditions_treatment_and_tissue <- l.conditions_treatment_and_tissue[idx.treatment]
                           
-                            m.functionality.i <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups), 
-                                                        dimnames = list(v.conditionGroups, v.tissueGroups))
-                         
-                            df.cluster_annotations.i <- c()
-                            
-                            # treatment and tissue annotations with at least th.min of genes 
-                            for(t in 1:length(l.conditions_treatment_and_tissue)){
-                              
-                              t.set <- unique(c(which(v.conditionGroups[df.annotation.j$condition_treatment_1] == names(l.conditions_treatment_and_tissue)[t]),
-                                                which(v.conditionGroups[df.annotation.j$condition_treatment_2] == names(l.conditions_treatment_and_tissue)[t])))
-                              
-                              for(k in 1:length(l.conditions_treatment_and_tissue[[t]])){
-                                
-                                k.set <- which(df.annotation.j$condition_tissue == l.conditions_treatment_and_tissue[[t]][k])
-                                                
-                                tk.set <- intersect(t.set, k.set) # treatment and tissue
-                                series.id.tk <- df.annotation.j$series_id[tk.set]
-                                
-                                # identify all enzymes according 
-                                v.gns.tk <- unique(unlist(l.genes_per_sets.significant[series.id.tk]))
-                                m.functionality.i[names(l.conditions_treatment_and_tissue)[t], l.conditions_treatment_and_tissue[[t]][k]] <- 1 #length(v.gns.tk) # round(length(v.gns.tk) / length(gns.i) * 100,1)
-                              
-                                #df.cluster_annotations.j <- data.frame()
-                                
-                                v.gn.names <- df.geneCluster.i$Gene.Name
-                                names(v.gn.names) <- df.geneCluster.i$Gene.ID  
-                                
-                                
-                                # treatment and tissue annotations with at least th.min of genes 
-                                df.cluster_annotations.j <- data.frame(cluster.ID = v.gcs[i],
-                                                                       rank = rank.i,
-                                                                       number_of_enzymes_total = length(gns.i),
-                              
-                                                                       number_of_coexpressed_enzymes = length(unique(c(df.rho$gn.1, df.rho$gn.2))),
-                                                                       percentage_of_coexpressed_enzymes =  round(length(unique(c(df.rho$gn.1, df.rho$gn.2))) / length(gns.i) * 100,1),
-                                
-                                ###
-                                                                        
-                                                                        condition_treatment =  names(l.conditions_treatment_and_tissue)[t],
-                                                                        condition_tissue =  l.conditions_treatment_and_tissue[[t]][k],
-                                                                        
-                                                                        number_of_coexpressed_enzymes_in_condition = length(v.gns.tk),
-                                                                        percentage_of_coexpressed_enzymes_in_condition = round(length(v.gns.tk) / length(gns.i) * 100,1),
-                                                                        ids_of_coexpressed_enzymes_in_condition =paste(v.gns.tk, collapse = " / "),
-                                                                        
-                                                                       
-                                                                        names_of_enzymes_in_condition = paste(v.gn.names[v.gns.tk], collapse = " / "))
-                                                                        
-                                df.cluster_annotations.i <- rbind(df.cluster_annotations.i, df.cluster_annotations.j)
-                                
-                              }
-                            }
+                          #m.functionality.i <- m.functionality.i[rowSums(m.functionality.i) > 0, colSums(m.functionality.i) > 0]
+                          m.heatmap <- t(m.functionality.i) #  m.MR # * m.regulatorActivity.pvalue
+                          # colnames(m.heatmap)[21] <- "pathogen (pythopthera, botrytis)"
+                          # colnames(m.heatmap)[7] <- "hormone (BRs, ethylene)"
+                          # 
+                          #m.heatmap <- m.functionality.i
+                          #m.heatmap <- m.heatmap[which(rowSums(m.heatmap) > 0), which(colSums(m.heatmap) > 0)]
+                          p <- pheatmap((m.heatmap), cluster_rows = FALSE,cluster_cols = FALSE, color = c("black", "white"), legend = FALSE,
+                                        main = paste("Condition activity map of gene cluster ", v.gcs[i], "\n (white indicates activity in condition)", sep = ""))
+                          save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=heatmap_width, height=heatmap_height)
                           
-                            
-                            df.cluster_annotations <- rbind(df.cluster_annotations, df.cluster_annotations.i)
-                            
-                            
-                            #m.functionality.i <- m.functionality.i[rowSums(m.functionality.i) > 0, colSums(m.functionality.i) > 0]
-                            m.heatmap <- t(m.functionality.i) #  m.MR # * m.regulatorActivity.pvalue
-                            # colnames(m.heatmap)[21] <- "pathogen (pythopthera, botrytis)"
-                            # colnames(m.heatmap)[7] <- "hormone (BRs, ethylene)"
-                            # 
-                            #m.heatmap <- m.functionality.i
-                            #m.heatmap <- m.heatmap[which(rowSums(m.heatmap) > 0), which(colSums(m.heatmap) > 0)]
-                            p <- pheatmap((m.heatmap), cluster_rows = FALSE,cluster_cols = FALSE, color = c("black", "white"), legend = FALSE,
-                                          main = paste("Condition activity map of gene cluster ", v.gcs[i], "\n (white indicates activity in condition)", sep = ""))
-                            save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=heatmap_width, height=heatmap_height)
-                      
-                            #### enzyme coexpression map 
-                            
+                          #### enzyme coexpression map 
+                          if(FALSE){
                             v.gns_plus_names <- paste(gns.i, " (" ,v.gn.names[gns.i], ")", sep = "")
                             
                             m.coexpression.i <- matrix(0, nrow = length(v.gns_plus_names), ncol = length(v.gns_plus_names), 
@@ -519,35 +519,48 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                               k2 <- paste(df.rho$gn.2[k], " (" ,v.gn.names[df.rho$gn.2[k]], ")", sep = "")
                               m.coexpression.i[k1,k2] <- df.rho$v.pcc[k]
                             }
+                          }else{
+                         
+                            m.coexpression.i <- matrix(0, nrow = length(gns.i), ncol = length(gns.i), 
+                                                       dimnames = list(gns.i, gns.i))
                             
-                            m.coexpression.i <- m.coexpression.i + t(m.coexpression.i)
                             
-                            p <- pheatmap(m.coexpression.i, cluster_rows = FALSE,cluster_cols = FALSE, legend = TRUE, 
-                                          main = paste("Coexpression map of gene cluster ", v.gcs[i], "\n (colors indicate Pearson's correlation values)", sep = ""))
-                            save_pheatmap_pdf(p, paste(foldername.results, "/coexpression_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=heatmap_width, height=heatmap_height)
-                                              
-
-                            # functionality map - pvalue 
-                            m.functionality.i[m.functionality.i > 0] <- 1
-                            m.functionality <- m.functionality + m.functionality.i # global cluster 
-                      
+                            for(k in 1:nrow(df.rho)){
+                              k1 <- df.rho$gn.1[k]
+                              k2 <- df.rho$gn.2[k] 
+                              m.coexpression.i[k1,k2] <- df.rho$v.pcc[k]
+                            }
                           }
+                          
+                          
+                          m.coexpression.i <- m.coexpression.i + t(m.coexpression.i)
+                          
+                          p <- pheatmap(m.coexpression.i, cluster_rows = FALSE,cluster_cols = FALSE, legend = TRUE, 
+                                        main = paste("Coexpression map of gene cluster ", v.gcs[i], "\n (colors indicate Pearson's correlation values)", sep = ""))
+                          save_pheatmap_pdf(p, paste(foldername.results, "/coexpression_heatmaps/", v.gcs[i],".pdf", sep = ""),  width=heatmap_width, height=heatmap_height)
+                          
+                          
+                          # functionality map - pvalue 
+                          m.functionality.i[m.functionality.i > 0] <- 1
+                          m.functionality <- m.functionality + m.functionality.i # global cluster 
+                          
                         }
                       }
-                      
-
                     }
+                    
+                    
                   }
                 }
               }
             }
           }
+        }
       }
     }
   }
   
   close(pb)
-
+  
   if(!b.prepare){
     df.cluster_annotations <- df.cluster_annotations[order(-df.cluster_annotations$rank),]
     return(list(df.cluster_annotations=df.cluster_annotations, m.functionality = m.functionality))
@@ -643,33 +656,33 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
 #'                            heatmap_width = 10, heatmap_height = 5,
 #'                            foldername.results = "results/")
 run_METACLUSTER = function(m.foldChange_differentialExpression,
-                          m.pvalue_differentialExpression,
-                          df.experiment_condition_annotation,
-                          df.geneCluster,
-                          tb.condition_treatments,
-                          tb.condition_tissues,
-                          n.cpus = 3,
-                          b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
-                          pvalue_DifferentialExpression = 0.05,
-                          probability_codifferentialExpression_MonteCarloSimulation = 0.95,
-                          pvalue_coexpression_distribution = 0.05,
-                          pvalue_geneClusterPrediction = 0.05,
-                          pvalue_geneClusterConsistency = 0.05,
-                          pvalue_treatment_per_condition = 0.05,
-                          pvalue_tissue_per_condition = 0.05,
-                          th.consistent_condition_presence_percentage = 0.95,
-                          min_number_of_genes = 3,
-                          number_codifferentialExpression_MonteCarloSimulations = 3,
-                          number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
-                          min_number_condition_samples = 1,
-                          seed = 1234,
-                          heatmap_width = 10, heatmap_height = 6,
-                          foldername.tmp = "tmp/",
-                          foldername.results = "results/"){
-
+                           m.pvalue_differentialExpression,
+                           df.experiment_condition_annotation,
+                           df.geneCluster,
+                           tb.condition_treatments,
+                           tb.condition_tissues,
+                           n.cpus = 3,
+                           b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
+                           pvalue_DifferentialExpression = 0.05,
+                           probability_codifferentialExpression_MonteCarloSimulation = 0.95,
+                           pvalue_coexpression_distribution = 0.05,
+                           pvalue_geneClusterPrediction = 0.05,
+                           pvalue_geneClusterConsistency = 0.05,
+                           pvalue_treatment_per_condition = 0.05,
+                           pvalue_tissue_per_condition = 0.05,
+                           th.consistent_condition_presence_percentage = 0.95,
+                           min_number_of_genes = 3,
+                           number_codifferentialExpression_MonteCarloSimulations = 3,
+                           number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
+                           min_number_condition_samples = 1,
+                           seed = 1234,
+                           heatmap_width = 10, heatmap_height = 6,
+                           foldername.tmp = "tmp/",
+                           foldername.results = "results/"){
   
   
-
+  
+  
   if(!file.exists(foldername.tmp)){
     dir.create(foldername.tmp)
   }
@@ -735,7 +748,7 @@ run_METACLUSTER = function(m.foldChange_differentialExpression,
     }
     close(pb)
     saveRDS(m.co_diff, paste(foldername.tmp, "m.co_diff.", th.diffexp, ".rds", sep = ""))
-  
+    
     tb.series_ids <- colSums(m.de.bin)
     v.gns <- rownames(m.de.ternary)
     
@@ -782,20 +795,20 @@ run_METACLUSTER = function(m.foldChange_differentialExpression,
     }
     
     print(Sys.time()-strt)
-
+    
     saveRDS(v.th.likelihood, paste(foldername.tmp, "v.th.likelihood_", th.diffexp, "_" ,th.prob.MC, "_",n.sim, ".rds", sep = ""))
     
   }
-
+  
   if(!file.exists(paste(foldername.tmp, "v.th.likelihood_", th.diffexp, "_" ,th.prob.MC,"_",n.sim, ".rds", sep = ""))){
     stop("Error: Monte Carlo simulation and / or co-differential expression matrix does not exist!")
   }
   
   m.co_diff <- readRDS(paste(foldername.tmp, "m.co_diff.", th.diffexp, ".rds", sep = ""))
   v.th.likelihood <- readRDS(paste(foldername.tmp, "v.th.likelihood_", th.diffexp, "_" ,th.prob.MC, "_",n.sim, ".rds", sep = ""))
-
+  
   th.min_overlap <- round(mean(v.th.likelihood),0)
-
+  
   #####
   
   message("compute sampled condition specific coexpression ... ")
@@ -830,27 +843,27 @@ run_METACLUSTER = function(m.foldChange_differentialExpression,
   
   # estimate genomic cluster correlation - integrate automatic adaption 
   l.results <- estimate_cluster_coexpression(m.fc = m.fc, m.de.ternary = m.de.ternary, m.co_diff = m.co_diff, 
-                                         df.annotation = df.annotation,
-                                         df.geneCluster = df.geneCluster,
-                                         tb.condition_treatments = tb.condition_treatments,
-                                         tb.condition_tissues = tb.condition_tissues,
-                                         n.gene_pair_samples = n.gene_pair_samples,
-                                         th.min_overlap = th.min_overlap, 
-                                         th.min.samples = th.min.samples,
-                                         th.gns.min = th.gns.min,
-                                         th.p.cluster = th.p.cluster,
-                                         th.rho_prob = th.rho_prob,
-                                         th.pval.treatment=th.pval.treatment,
-                                         th.pval.tissue=th.pval.tissue,
-                                         th.consistent_condition_presence_percentage = th.consistent_condition_presence_percentage,
-                                         s.multipleHypthesisCorrection = "none",
-                                         seed=seed,
-                                         b.choseSimilarConditionInSimulation = TRUE,
-                                         b.signatureEnzymeAnalysis = FALSE,
-                                         b.prepare = FALSE, v.rho_random.gene_pairs = v.rho_random.gene_pairs,
-                                         foldername.results=foldername.results,
-                                         heatmap_width = heatmap_width, heatmap_height = heatmap_height)
-
+                                             df.annotation = df.annotation,
+                                             df.geneCluster = df.geneCluster,
+                                             tb.condition_treatments = tb.condition_treatments,
+                                             tb.condition_tissues = tb.condition_tissues,
+                                             n.gene_pair_samples = n.gene_pair_samples,
+                                             th.min_overlap = th.min_overlap, 
+                                             th.min.samples = th.min.samples,
+                                             th.gns.min = th.gns.min,
+                                             th.p.cluster = th.p.cluster,
+                                             th.rho_prob = th.rho_prob,
+                                             th.pval.treatment=th.pval.treatment,
+                                             th.pval.tissue=th.pval.tissue,
+                                             th.consistent_condition_presence_percentage = th.consistent_condition_presence_percentage,
+                                             s.multipleHypthesisCorrection = "none",
+                                             seed=seed,
+                                             b.choseSimilarConditionInSimulation = TRUE,
+                                             b.signatureEnzymeAnalysis = FALSE,
+                                             b.prepare = FALSE, v.rho_random.gene_pairs = v.rho_random.gene_pairs,
+                                             foldername.results=foldername.results,
+                                             heatmap_width = heatmap_width, heatmap_height = heatmap_height)
+  
   
   return(l.results)
 }
