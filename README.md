@@ -22,7 +22,7 @@ To run the METACLUSTER with the Schlapfer et al. 2017 A.thaliana gene cluster pr
 ```
 library(METACLUSTER) # load package
 
-setwd("/User/home/athaliana_schlapfer2017") # set working directory to the dataset files
+setwd("/User/home/folder_athaliana_datasets") # set working directory to the dataset files
 
 
 ```
