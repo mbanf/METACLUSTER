@@ -91,7 +91,7 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             pvalue_geneClusterConsistency = 0.05,
                             pvalue_treatment_per_condition = 0.05,
                             pvalue_tissue_per_condition = 0.05,
-                            th.consistent_condition_presence_percentage = 0.95,
+                            th.consistent_condition_presence_percentage = 0.7,
                             min_number_of_genes = 3,
                             number_codifferentialExpression_MonteCarloSimulations = 3,
                             number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
