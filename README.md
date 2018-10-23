@@ -118,11 +118,11 @@ A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionalit
 ![Alt text](/figure1.JPG?raw=true "functionality map")
 
 
-Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C641 from Schlapfer et al. 2017
-![Alt text](/C641_coexpression.jpg?raw=true "coexpression map")
+Gene cluster context specific co-expression heatmap inferred by METACLUSTER of the C628 from Schlapfer et al. 2017
+![Alt text](/C628_coexpression.jpg?raw=true "coexpression map")
 
-Gene cluster context specific functionality heatmap inferred by METACLUSTER of the C641 from Schlapfer et al. 2017
-![Alt text](/C641_functionality.jpg?raw=true "coexpression map")
+Gene cluster context specific functionality heatmap inferred by METACLUSTER of the C628 from Schlapfer et al. 2017
+![Alt text](/C628_functionality.jpg?raw=true "coexpression map")
 
 ## Notes
 
