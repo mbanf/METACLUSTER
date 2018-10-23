@@ -24,8 +24,6 @@ library(METACLUSTER) # load package
 
 setwd("/User/home/athaliana_schlapfer2017") # set working directory to the dataset files
 
-# install_and_load_libraries()
-
 
 ```
 
