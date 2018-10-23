@@ -9,8 +9,8 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
 
-perform_significance_tests = function(n.sig.enz.counter = 177, 
-                                      n.enz_predicted = 1076){
+perform_significance_tests = function(n.sig.enz.counter = 174, 
+                                      n.enz_predicted = 1025){
   
   
   message("signature enzyme enrichment - compare among enzymes")
@@ -282,7 +282,7 @@ evaluate_and_store_results = function(df.cluster_annotations,
   # m.functionality <- m.functionality[rowSums(m.functionality) > 0, colSums(m.functionality) > 0]
   
   
-  m.functionality <- m.functionality[sort(rownames(m.functionality)), sort(colnames(m.functionality))]
+  m.functionality <- m.functionality[sort(rownames(m.functionality)),]
   
   m.availability = matrix(-1, nrow = nrow(m.functionality), ncol = ncol(m.functionality), dimnames = list(rownames(m.functionality), colnames(m.functionality)))
   for(i in 1:nrow(df.experiment_condition_annotation)){
@@ -297,11 +297,14 @@ evaluate_and_store_results = function(df.cluster_annotations,
   
   for(i in 1:nrow(m.availability)){
     for(j in 1:ncol(m.availability)){
-      if(m.availability[i,j] == -1){
-        m.functionality[i,j] = -1
+      if(colnames(m.functionality)[j] != "nonspecific"){
+        if(m.availability[i,j] == -1){
+          m.functionality[i,j] = -1
+        }  
       }
     }
   }
+  
   m.functionality[m.functionality == -1] = NA
   
   m.heatmap <- t(m.functionality) #  m.MR # * m.regulatorActivity.pvalue

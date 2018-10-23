@@ -105,7 +105,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
     p.sig <- length(which(df.geneCluster$Enzyme.classification != "")) / nrow(df.geneCluster)
   }
   
-  m.functionality <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups), dimnames = list(v.conditionGroups, v.tissueGroups))
+  m.functionality <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups) + 1, dimnames = list(v.conditionGroups, c(v.tissueGroups, "nonspecific")))
   
   tb.series_ids <- colSums(abs(m.de.ternary))
   v.gns <- rownames(m.de.ternary)
@@ -419,6 +419,8 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                           # if significant tissues for treatment are found
                           if(length(tb.tissues_per_treatment) > 0){
                             l.conditions_treatment_and_tissue[[t]] <- names(tb.tissues_per_treatment)
+                          }else{ # add non specific
+                            l.conditions_treatment_and_tissue[[t]] <- "nonspecific"
                           }
                         }
                         
@@ -438,8 +440,8 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                           # list with individual (multiple) tissue elements
                           l.conditions_treatment_and_tissue <- l.conditions_treatment_and_tissue[idx.treatment]
                           
-                          m.functionality.i <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups), 
-                                                      dimnames = list(v.conditionGroups, v.tissueGroups))
+                          m.functionality.i <- matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups) + 1, 
+                                                      dimnames = list(v.conditionGroups, c(v.tissueGroups, "nonspecific")))
                           
                           df.cluster_annotations.i <- c()
                           
@@ -496,7 +498,11 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
                           
                           
                           #m.functionality.i <- m.functionality.i[rowSums(m.functionality.i) > 0, colSums(m.functionality.i) > 0]
-                          m.heatmap <- t(m.functionality.i) #  m.MR # * m.regulatorActivity.pvalue
+                          m.tmp = m.functionality.i
+                          m.heatmap <- m.tmp[sort(rownames(m.tmp)),]
+                          m.heatmap <- t(m.heatmap) #  m.MR # * m.regulatorActivity.pvalue
+                          
+                          
                           # colnames(m.heatmap)[21] <- "pathogen (pythopthera, botrytis)"
                           # colnames(m.heatmap)[7] <- "hormone (BRs, ethylene)"
                           # 
@@ -592,7 +598,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
 #' @param pvalue_geneClusterConsistency pvalue gene cluster enzyme condition consistency (default = 0.05)
 #' @param pvalue_treatment_per_condition pvalue gene pair condition annotation (default = 0.05)
 #' @param pvalue_tissue_per_condition pvalue gene pair tissue annotation (default = 0.05)
-#' @param th.consistent_condition_presence_percentage percentage of enyzmes with similar annotation per gene cluster (default = 0.8)
+#' @param th.consistent_condition_presence_percentage percentage of gene cluster enyzmes that are expressed in each condition in order to annotate the condition to the cluster (default = 0.7
 #' @param min_number_of_genes min number of enzymes per gene cluster (default = 3)
 #' @param number_codifferentialExpression_MonteCarloSimulations number of codiffernetial expression background monte carlo simulations (default = 3)
 #' @param number_conditionSpecificCoexpressionBackgroundGenePairs number of context specific coexpression simulation background gene pairs (default = 50)
@@ -637,7 +643,7 @@ estimate_cluster_coexpression <- function(m.fc = m.fc,
 #'                             pvalue_geneClusterConsistency = 0.05,
 #'                             pvalue_treatment_per_condition = 0.05,
 #'                             pvalue_tissue_per_condition = 0.05,
-#'                             th.consistent_condition_presence_percentage = 0.95,
+#'                             th.consistent_condition_presence_percentage = 0.7,
 #'                             min_number_of_genes = 3,
 #'                             number_codifferentialExpression_MonteCarloSimulations = 3,
 #'                             number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
@@ -670,7 +676,7 @@ run_METACLUSTER = function(m.foldChange_differentialExpression,
                            pvalue_geneClusterConsistency = 0.05,
                            pvalue_treatment_per_condition = 0.05,
                            pvalue_tissue_per_condition = 0.05,
-                           th.consistent_condition_presence_percentage = 0.95,
+                           th.consistent_condition_presence_percentage = 0.7,
                            min_number_of_genes = 3,
                            number_codifferentialExpression_MonteCarloSimulations = 3,
                            number_conditionSpecificCoexpressionBackgroundGenePairs = 100,

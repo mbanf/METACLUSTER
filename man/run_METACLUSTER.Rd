@@ -16,7 +16,7 @@ run_METACLUSTER(m.foldChange_differentialExpression,
   pvalue_geneClusterConsistency = 0.05,
   pvalue_treatment_per_condition = 0.05,
   pvalue_tissue_per_condition = 0.05,
-  th.consistent_condition_presence_percentage = 0.95,
+  th.consistent_condition_presence_percentage = 0.7,
   min_number_of_genes = 3,
   number_codifferentialExpression_MonteCarloSimulations = 3,
   number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
@@ -55,7 +55,7 @@ run_METACLUSTER(m.foldChange_differentialExpression,
 
 \item{pvalue_tissue_per_condition}{pvalue gene pair tissue annotation (default = 0.05)}
 
-\item{th.consistent_condition_presence_percentage}{percentage of enyzmes with similar annotation per gene cluster (default = 0.8)}
+\item{th.consistent_condition_presence_percentage}{percentage of gene cluster enyzmes that are expressed in each condition in order to annotate the condition to the cluster (default = 0.7}
 
 \item{min_number_of_genes}{min number of enzymes per gene cluster (default = 3)}
 
@@ -116,7 +116,7 @@ l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldC
                             pvalue_geneClusterConsistency = 0.05,
                             pvalue_treatment_per_condition = 0.05,
                             pvalue_tissue_per_condition = 0.05,
-                            th.consistent_condition_presence_percentage = 0.95,
+                            th.consistent_condition_presence_percentage = 0.7,
                             min_number_of_genes = 3,
                             number_codifferentialExpression_MonteCarloSimulations = 3,
                             number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
