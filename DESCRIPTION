@@ -1,10 +1,10 @@
-Package: MERIT
-Title: MastEr Regulator Inference Tool 
+Package: METACLUSTER
+Title:  A package for context-specific functionality analysis of metabolic gene clusters 
 Version: 0.1.0
 Authors: Michael Banf
 Maintainer: Michael Banf <michael@junkdna.ai>
-Description: MastEr Regulator Inference Tool
-Depends: R (>= 3.4.3), reshape2 (>= 1.4.3), lars (>= 1.2), foreach (>= 1.4.4), doParallel (>= 1.0.11), pheatmap (>= 1.0.1), ggplot2 (>= 3.0.0), igraph (>= 1.2.2), seqinr (>= 3.4), networkD3 (>= 0.4), taRifx (>= 1.0.6.1), parmigene (>= 1.0.2), ranger (>= 0.10.1)
+Description: METACLUSTER provides a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information to facilitate a more comprehensive condition and tissue-specific functionality analysis of metabolic gene clusters. 
+Depends: R (>= 3.4.3), reshape2 (>= 1.4.3), foreach (>= 1.4.4), doParallel (>= 1.0.11), pheatmap (>= 1.0.1), metap (>= 1.0)
 License: MIT License
 Encoding: UTF-8
 LazyData: true
