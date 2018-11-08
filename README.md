@@ -111,12 +111,12 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  
  
  A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
- ![Alt text](/figure1.JPG?raw=true "functionality map")
+ ![Alt text](/figure1.jpg?raw=true "functionality map")
  
 
  
  Gene cluster context specific functionality heatmap inferred by METACLUSTER of the C628 from Schlapfer et al. 2017
- ![Alt text](/C628_functionality.jpg?raw=true "coexpression map")
+ ![Alt text](/C615.png?raw=true "coexpression map")
  
  ## Notes
  
