@@ -3,6 +3,11 @@
  ## About
  METACLUSTER facilitates comprehensive condition and tissue-specific functionality analysis of metabolic gene clusters based on a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information
  
+  ![Alt text](/figure1.jpg?raw=true "functionality map")
+ A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
+ 
+ 
+ 
  [Contact](mailto:mbanf.research@gmail.com) in case you've found a bug. 
  
  ## Installation
@@ -110,12 +115,6 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  ```
  
  
- 
- 
- 
-
- ![Alt text](/figure1.jpg?raw=true "functionality map")
- A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
  
  
  
