@@ -115,7 +115,7 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  
 
  
- Gene cluster context specific functionality heatmap inferred by METACLUSTER of the C628 from Schlapfer et al. 2017
+ Gene cluster context specific functionality heatmap inferred by METACLUSTER of the C615, i.e. marneral (see Field et al., 2011), from Schlapfer et al. 2017
  ![Alt text](/C615.png?raw=true "coexpression map")
  
  ## Notes
