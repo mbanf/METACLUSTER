@@ -106,7 +106,6 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  
  Next evaluate and store the results
  ```
- print(head(l.results$df.cluster_annotations))
  evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
                             df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
                             m.functionality=l.results$m.functionality, 
