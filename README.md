@@ -67,16 +67,14 @@
 * `pvalue_geneClusterConsistency` pvalue gene cluster enzyme condition consistency (default = 0.05)
 * `pvalue_treatment_per_condition` pvalue gene pair condition annotation (default = 0.05)
 * `pvalue_tissue_per_condition` pvalue gene pair tissue annotation (default = 0.05)
-* `th.consistent_condition_presence_percentage` percentage of gene cluster enyzmes that are expressed in each condition in order to annotate the condition to the cluster (default = 0.7)
-* `min_number_of_genes` min number of enzymes per gene cluster (default = 3)
-* `number_codifferentialExpression_MonteCarloSimulations` number of codiffernetial expression background monte carlo simulations (default = 3)
-* `number_conditionSpecificCoexpressionBackgroundGenePairs` number of context specific coexpression simulation background gene pairs (default = 50)
+* `number_codifferentialExpression_MonteCarloSimulations` number of codiffernetial expression background monte carlo simulations (default = 1)
+* `number_conditionSpecificCoexpressionBackgroundGenePairs` number of context specific coexpression simulation background gene pairs (default = 100)
  * `min_number_condition_samples` minimum number of condition samples for significance test (default 1)
  * `foldername.tmp` temp file folder name (default = /tmp)
  * `foldername.results` results file folder name (default = /results)
  
  ```
- l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldChange_differentialExpression,
+df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldChange_differentialExpression,
                              m.pvalue_differentialExpression = l.data$m.pvalue_differentialExpression,
                              df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
                              df.geneCluster = l.data$df.geneCluster,
@@ -91,9 +89,7 @@
                              pvalue_geneClusterConsistency = 0.05,
                              pvalue_treatment_per_condition = 0.05,
                              pvalue_tissue_per_condition = 0.05,
-                             th.consistent_condition_presence_percentage = 0.7,
-                             min_number_of_genes = 3,
-                             number_codifferentialExpression_MonteCarloSimulations = 3,
+                             number_codifferentialExpression_MonteCarloSimulations = 1,
                              number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
                              min_number_condition_samples = 1,
                              seed = 1234,
@@ -106,7 +102,7 @@
  Next evaluate and store the results
  ```
  print(head(l.results$df.cluster_annotations))
- evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotations,
+ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
                             df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
                             m.functionality=l.results$m.functionality, 
                             heatmap_width = 10, heatmap_height = 5,
