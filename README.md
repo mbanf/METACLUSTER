@@ -110,14 +110,19 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  ```
  
  
- A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
- ![Alt text](/figure1.jpg?raw=true "functionality map")
+ 
+ 
  
 
+ ![Alt text](/figure1.jpg?raw=true "functionality map")
+ A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
  
-Context specific functionality map inferred by METACLUSTER of the C615, i.e. marneral (see Field et al., 2011), from Schlapfer et al. 2017. Colors indicate the rank if the cluster to be active per condition and tissue. Gray tiles indicate condition tissuecombinations not present in the expression dataset
+ 
+ 
+ 
+
  ![Alt text](/C615.png?raw=true "coexpression map")
- 
+ Context specific functionality map inferred by METACLUSTER of the C615, i.e. marneral (see Field et al., 2011), from Schlapfer et al. 2017. Colors indicate the rank if the cluster to be active per condition and tissue. Gray tiles indicate condition tissuecombinations not present in the expression dataset
  ## Notes
  
  Installation of devtools dependencies under Ubuntu (prior to installing devtools):
