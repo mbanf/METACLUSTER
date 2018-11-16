@@ -23,6 +23,7 @@
  
  To run the METACLUSTER with the Schlapfer et al. 2017 A.thaliana gene cluster predictions data you can download all neccessary datasets from onedrive: [datasets_athaliana](https://1drv.ms/u/s!Avm82Xhe9EZj1iowxEqa_ChVQciY)
  
+ set specific data format for "custom" files at the end
  
  ```
  library(METACLUSTER) # load package
@@ -125,3 +126,13 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  
  Installation of devtools dependencies under Ubuntu (prior to installing devtools):
  sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
+ 
+ 
+ Data format of the gene cluster input files. 
+ 
+ GeneName	GeneID	ClusterID	rxn.id
+	AT5G61680	C672_3	[PECTINESTERASE-RXN, RXN-2102]
+	AT5G61690	C672_3	[3.6.3.25-RXN]
+	AT5G61700	C672_3	[3.6.3.25-RXN]
+
+ 
