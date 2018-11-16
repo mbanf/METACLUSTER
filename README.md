@@ -128,14 +128,7 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
  
  
- Data format of the gene cluster input files. 
- 
- 
- "Cluster.ID", "Gene.ID", "Gene.Name"
- 
- GeneName	GeneID	ClusterID	rxn.id
-	AT5G61680	C672_3	[PECTINESTERASE-RXN, RXN-2102]
-	AT5G61690	C672_3	[3.6.3.25-RXN]
-	AT5G61700	C672_3	[3.6.3.25-RXN]
+ Data format of the gene cluster input files.  ("Cluster.ID", "Gene.ID", "Gene.Name")
+
 
  
