@@ -4,7 +4,7 @@
  METACLUSTER facilitates comprehensive condition and tissue-specific functionality analysis of metabolic gene clusters based on a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information
  
   ![Alt text](/figure1.jpg?raw=true "functionality map")
- A) Overview of the METACLUSTER framework. B) Metabolic gene cluster functionality overview map inferred by METACLUSTER for the Schlapfer et al. 2017 A.thaliana gene cluster predictions data (Color values denote the number of active gene clusters per condition. Gray tiles indicates condition tissue combinations absent in the differential expression datasets).
+ A) The METACLUSTER framework. B) Cluster diagram and transcriptional activity map of the arabidiol/baruol cluster (Yu et al. 2016) (C463 based on the prediction in Schlapfer et al. 2017). Colors indicate the inferred p-value of the cluster to be transcriptionally active per condition and tissue. Gray tiles indicate condition-tissue combinations that are missing in the differential expression dataset. C) Transcriptional activity map of the 317 inferred context-specific gene clusters. Color values denote the number of the transcriptionally active gene clusters per condition-tissue. Black tiles indicate condition-tissue combinations with no inferred transcriptionally active clusters.
  
  
  
