@@ -1,6 +1,6 @@
 Package: METACLUSTER
-Title: A package for context-specific functionality analysis of metabolic gene clusters 
-Version: 0.1.0
+Title: A package for context-specific expression analysis of metabolic gene clusters 
+Version: 1.0.0
 Authors: Michael Banf
 Maintainer: Michael Banf <michael@junkdna.ai>
 Description: METACLUSTER provides a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information to facilitate a more comprehensive condition and tissue-specific functionality analysis of metabolic gene clusters. 
