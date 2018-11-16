@@ -35,7 +35,7 @@
  
  Load datasets parameters:
  
- * `input_format` "custom" or "PCF2017" (default = "PCF2017")
+ * `input_format` "custom", "PCF2017_enzymes_only" or "PCF2017" (default = "PCF2017_enzymes_only")
  * `filename.genes` genes (rows of the expression datasets)
  * `filename.experiment_series_ids` experimental datasets (columns of the expression datasets)
  * `filename.geneCluster` filename gene clusters
@@ -44,7 +44,7 @@
  * `filename.experiment_condition_tissue_annotation` experiment to treatment and tissue annotation
  
  ```
- l.data = load_datasets(input_format = "PCF2017",
+ l.data = load_datasets(input_format = "PCF2017_enzymes_only",
                         filename.genes = "data/genes.txt",
                         filename.experiment_series_ids = "data/experiment_series_ids.txt",
                         filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
@@ -129,6 +129,9 @@ df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l
  
  
  Data format of the gene cluster input files. 
+ 
+ 
+ "Cluster.ID", "Gene.ID", "Gene.Name"
  
  GeneName	GeneID	ClusterID	rxn.id
 	AT5G61680	C672_3	[PECTINESTERASE-RXN, RXN-2102]
