@@ -1,5 +1,5 @@
 Package: METACLUSTER
-Title:  A package for context-specific functionality analysis of metabolic gene clusters 
+Title: A package for context-specific functionality analysis of metabolic gene clusters 
 Version: 0.1.0
 Authors: Michael Banf
 Maintainer: Michael Banf <michael@junkdna.ai>
@@ -8,6 +8,4 @@ Depends: R (>= 3.4.3), reshape2 (>= 1.4.3), foreach (>= 1.4.4), doParallel (>= 1
 License: MIT License
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
-
-
+RoxygenNote: 6.1.0.9000

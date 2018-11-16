@@ -5,15 +5,18 @@
 \title{A result statistics}
 \usage{
 evaluate_and_store_results(df.cluster_annotations,
-  df.experiment_condition_annotation, m.functionality,
-  v.gc_validated = c("C628_3", "C463_3", "C615_3", "C641_3"),
-  heatmap_width = 10, heatmap_height = 6,
+  df.experiment_condition_annotation,
+  tb.condition_treatments = l.data$tb.condition_treatments,
+  tb.condition_tissues = l.data$tb.condition_tissues,
+  min_number_of_genes = 2, v.gc_validated = c("C628_3", "C463_3",
+  "C615_3", "C641_3"), heatmap_width = 10, heatmap_height = 6,
+  fontsize = 7, fontsize_row = 9, fontsize_col = 9,
   foldername.results = "results/")
 }
 \arguments{
 \item{df.cluster_annotations}{inferred cluster condition annotations}
 
-\item{m.functionality}{gene cluster acitivity heatmap}
+\item{df.experiment_condition_annotation}{gene cluster acitivity heatmap}
 }
 \description{
 This function analysis the results

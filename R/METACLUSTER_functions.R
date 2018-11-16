@@ -9,16 +9,21 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
 
-perform_significance_tests = function(n.sig.enz.counter = 174, 
-                                      n.enz_predicted = 1025){
+perform_significance_tests = function(df.cluster_annotations,
+                                      df.geneCluster,
+                                      min_number_of_genes = 2){
   
+  df.cluster_annotations = subset(df.cluster_annotations, df.cluster_annotations$number_of_codiff_expressed_genes >= min_number_of_genes)
+  v.enz.predicted = paste(as.character(df.cluster_annotations$condition_and_tissue_specific_genes), collapse = " / ")
+  v.enz.predicted = unique(unlist(strsplit(v.enz.predicted, " / ")))
   
   message("signature enzyme enrichment - compare among enzymes")
-  n.sigEnzymes <- length(which(l.data$df.geneCluster$Gene.Name != ""))
-  n.enz <- nrow(l.data$df.geneCluster)
+  n.sigEnzymes <- length(which(df.geneCluster$Gene.Name != ""))
+  n.enz <- nrow(df.geneCluster)
   
-  
-  # compare the number of coe
+  df.geneCluster.predicted = subset(df.geneCluster, df.geneCluster$Gene.ID %in% v.enz.predicted)
+  n.enz_predicted = length(v.enz.predicted)
+  n.sig.enz.counter <- length(which(df.geneCluster.predicted$Gene.Name != ""))
   
   n.background <- n.enz
   hitInSample <- n.sig.enz.counter
@@ -27,18 +32,20 @@ perform_significance_tests = function(n.sig.enz.counter = 174,
   failInPop <- n.background - hitInPop
   
   foldChange <- (hitInSample / sampleSize) / (hitInPop / n.background)
-  p.val <- print(phyper(hitInSample, hitInPop, failInPop, sampleSize, lower.tail= FALSE))
+  p.val <- print(phyper(hitInSample, hitInPop, failInPop, sampleSize, lower.tail = FALSE))
   
-  print(foldChange)
-  print(p.val)
+  message(foldChange)
+  message(p.val)
   
   message("Schlapfer et al. high confidence overlap")
   
   df.Schlapfer_hc = read.table("data/high_confidence_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt", header = T, sep ="\t", stringsAsFactors = F)
-  v.gcs_predicted = unique(l.results$df.cluster_annotations$cluster.ID)
+  n.sigEnzymes.schlapfer <- length(which(df.Schlapfer_hc$GeneName != ""))
+
+  v.gcs_predicted = unique(df.cluster_annotations$cluster.ID)
   v.clusters.highConfidence = unique(df.Schlapfer_hc$ClusterID)
   
-  n.background <- length(unique(l.data$df.geneCluster$Cluster.ID))
+  n.background <- length(unique(df.geneCluster$Cluster.ID))
   hitInSample <- length(intersect(v.clusters.highConfidence, v.gcs_predicted))
   sampleSize <- length(v.gcs_predicted)
   hitInPop <-  length(v.clusters.highConfidence)  
@@ -49,10 +56,31 @@ perform_significance_tests = function(n.sig.enz.counter = 174,
   
   p.val <- print(phyper(hitInSample, hitInPop, failInPop, sampleSize, lower.tail= FALSE))
   
-  print(hitInSample)
-  print(p.val)
-  print(foldChange)
+  message(hitInSample)
+  message(p.val)
+  message(foldChange)
   
+  message("sig. enz")
+  
+  n.background <- nrow(df.Schlapfer_hc)
+  hitInSample <- n.sig.enz.counter
+  
+  sampleSize <- n.enz_predicted
+  hitInPop <-  n.sigEnzymes.schlapfer  
+  
+  
+  failInPop <- n.background - hitInPop
+  
+  foldChange <- (hitInSample / sampleSize) / (hitInPop / n.background)
+  # p.val <- print(phyper(hitInSample, hitInSample + hitInPop, failInPop + sampleSize - hitInSample, sampleSize, lower.tail = FALSE))
+  
+  p.val = fisher.test(matrix(c(hitInSample, hitInPop, sampleSize-hitInSample, failInPop), 2, 2), alternative='greater')$p.val;
+  
+  message(foldChange)
+  message(p.val)
+  
+  
+
 }
 
 
@@ -97,7 +125,7 @@ install_and_load_libraries <- function(){
 #' load_datasets()
 load_datasets = function(input_format = "PCF2017",
                          filename.genes = "",
-                         filename.experiment_series_ids = "",
+                         filename.experiment_ids = "",
                          filename.geneCluster = "",
                          filename.foldChange_differentialExpression = "",
                          filename.pvalue_differentialExpression =	"",
@@ -107,9 +135,11 @@ load_datasets = function(input_format = "PCF2017",
   df.geneCluster = load_gene_cluster_data(filename.geneCluster=filename.geneCluster, input_format=input_format)
   
   genes = read.table(filename.genes, header = F, sep = "\t", stringsAsFactors = F)[,1]
-  experiment_series_ids = read.table(filename.experiment_series_ids, header = F, sep = "\t", stringsAsFactors = F)[,1]
+  experiment_series_ids = read.table(filename.experiment_ids, header = F, sep = "\t", stringsAsFactors = F)[,1]
+  experiment_series_ids = as.character(experiment_series_ids)
   
   df.annotation = read.table(filename.experiment_condition_tissue_annotation, sep = "\t", stringsAsFactors = F, header = T)
+  df.annotation$unique_ID = as.character(df.annotation$unique_ID)
   df.foldChange_differentialExpression = read.table(filename.foldChange_differentialExpression, header = F, sep = "\t", stringsAsFactors = F)
   df.pvalue_differentialExpression = read.table(filename.pvalue_differentialExpression, header = F, sep = "\t", stringsAsFactors = F)
   
@@ -142,7 +172,7 @@ load_datasets = function(input_format = "PCF2017",
   
   df.annotation["number_series"] = 0
   for(i in 1:nrow(df.annotation)){
-    df.annotation$number_series[i] = tb.experiment_series_ids[df.annotation$series_id[i]]
+    df.annotation$number_series[i] = tb.experiment_series_ids[as.character(df.annotation$unique_ID[i])]
   }
   
   tb.tissues = numeric(length(v.tissues))
@@ -161,7 +191,7 @@ load_datasets = function(input_format = "PCF2017",
   for(i in 1:length(tb.condition_treatments)){
     idx_1 = which(df.annotation$condition_treatment_1 %in% names(tb.condition_treatments)[i])
     idx_2 = which(df.annotation$condition_treatment_2 %in% names(tb.condition_treatments)[i])
-    tb.condition_treatments[i] = sum(df.annotation$number_series[idx_1]) + sum(df.annotation$number_series[idx_2])
+    tb.condition_treatments[i] = length(idx_1) + length(idx_2)# sum(df.annotation$number_series[idx_1]) + sum(df.annotation$number_series[idx_2])
   }
   
   
@@ -180,13 +210,13 @@ load_datasets = function(input_format = "PCF2017",
 #'
 #' This function loads gene cluster information 
 #' @param filename.geneCluster includes gene cluster filenames as well as the input  
-#' @param input_format format of plant cluster finder (PCF2017) or custom 
+#' @param input_format format of plant cluster finder (PCF2017_enzymes_only), PCF2017 or custom 
 #' @keywords 
 #' @export
 #' @examples
 #' load_gene_cluster_data()
 load_gene_cluster_data = function(filename.geneCluster = "", 
-                                  input_format = "PCF2017"){
+                                  input_format = "PCF2017_enzymes_only"){
   
   format = input_format
   
@@ -200,7 +230,7 @@ load_gene_cluster_data = function(filename.geneCluster = "",
       stop(paste("error: could not find all mandatory columns in file:", paste(v.colnames_mandatory, collapse = ", ")))
     }
   }
-  if(format == "PCF2017"){
+  if(format == "PCF2017" | format == "PCF2017_enzymes_only"){
     # FORMAT the gene cluster file
     df.geneCluster <- read.table(filename.geneCluster, sep = "\t", header = FALSE, skip = 1, fill = T, stringsAsFactors = FALSE, quote = "")
     if(nrow(df.geneCluster) == 0){
@@ -211,6 +241,11 @@ load_gene_cluster_data = function(filename.geneCluster = "",
     for(j in 1:ncol(df.geneCluster)){
       df.geneCluster[,j]<- sapply(df.geneCluster[,j], trim)
     }
+    
+    if(format == "PCF2017_enzymes_only"){
+      df.geneCluster = subset(df.geneCluster, !df.geneCluster$rxn.id %in% c("[]", "[]/[]", "[]/[]/[]", "[]/[]/[]/[]", "[]/[]/[]/[]/[]", "[]/[]/[]/[]/[]/[]"))
+    }
+    
   }else{
     stop(paste("error: gene cluster format needs to be \"PCF2017\" or \"custom\" ", sep = ""))
   }
@@ -240,7 +275,9 @@ save_pheatmap_pdf <- function(x, filename, width=7, height=7) {
 #'
 #' This function analysis the results
 #' @param df.cluster_annotations inferred cluster condition annotations 
-#' @param m.functionality gene cluster acitivity heatmap
+#' @param df.experiment_condition_annotation gene cluster acitivity heatmap
+#' @param min_number_of_genes
+#' @param v.gc_validated
 #' @param heatmap_height
 #' @param heatmap_height
 #' @keywords 
@@ -249,77 +286,184 @@ save_pheatmap_pdf <- function(x, filename, width=7, height=7) {
 #' cat_function()
 evaluate_and_store_results = function(df.cluster_annotations,
                                       df.experiment_condition_annotation,
-                                      m.functionality,
+                                      tb.condition_treatments = l.data$tb.condition_treatments,
+                                      tb.condition_tissues = l.data$tb.condition_tissues,
+                                      
+                          
+                                      min_number_of_genes = 2,
                                       v.gc_validated = c("C628_3", "C463_3", "C615_3", "C641_3"),
-                                      heatmap_width = 10, heatmap_height = 6,
+                                      heatmap_width = 10, heatmap_height = 6, fontsize = 7, fontsize_row = 9, fontsize_col = 9,
                                       foldername.results = "results/"){
+  
+
+
+  if(!file.exists(foldername.results)){
+    dir.create(foldername.results)
+  }
+  
+  if(!file.exists(paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", sep = ""))){
+    dir.create(paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", sep = ""))
+  }
+  
+  df.cluster_annotations = subset(df.cluster_annotations, df.cluster_annotations$number_of_codiff_expressed_genes >= min_number_of_genes)
   
   
   write.table(df.cluster_annotations, paste(foldername.results, "/df.cluster_annotations.txt", sep = ""), row.names = F, sep = "\t")
   
+  v.enz.predicted = paste(as.character(df.cluster_annotations$condition_and_tissue_specific_genes), collapse = " / ")
+  v.enz.predicted = unique(unlist(strsplit(v.enz.predicted, " / ")))
   
   message("Statistics")
   v.gcs_predicted <- as.character(unique(df.cluster_annotations$cluster.ID))
-  v.enz_predicted <- as.character()
-  sig.enz.counter <- 0
-  for(i in 1:length(v.gcs_predicted)){
-    df.cluster_annotations.i <- subset(df.cluster_annotations, df.cluster_annotations$cluster.ID == as.character(v.gcs_predicted[i]))
-    v.gn.names.i <- unlist(strsplit(as.character(df.cluster_annotations.i$names_of_enzymes_in_condition)[1], " / "))
-    sig.enz.counter <- sig.enz.counter + length(which(v.gn.names.i != ""))
-    v.enz_predicted <- c(v.enz_predicted, unlist(strsplit(as.character(df.cluster_annotations.i$ids_of_coexpressed_enzymes_in_condition)[1], " / ")))
-    # number of coexpressed signature enzymes
-  }
-  message("# enzymes predicted: ", length(unique(v.enz_predicted)))
+  # v.enz_predicted <- as.character()
+  # sig.enz.counter <- 0
+  # for(i in 1:length(v.gcs_predicted)){
+  #   df.cluster_annotations.i <- subset(df.cluster_annotations, df.cluster_annotations$cluster.ID == as.character(v.gcs_predicted[i]))
+  #   v.gn.names.i <- unlist(strsplit(as.character(df.cluster_annotations.i$number_of_codiff_expressed_genes)[1], " / "))
+  #   sig.enz.counter <- sig.enz.counter + length(which(v.gn.names.i != ""))
+  #   v.enz_predicted <- c(v.enz_predicted, unlist(strsplit(as.character(df.cluster_annotations.i$codiff_expressed_genes)[1], " / ")))
+  #   # number of coexpressed signature enzymes
+  # }
+  message("# enzymes predicted: ", length(unique(v.enz.predicted)))
   message("# gene clusters with context predicted: ", length(v.gcs_predicted))
-  message("# signature enzymes predicted: ", sig.enz.counter)
+  #message("# signature enzymes predicted: ", sig.enz.counter)
+  
+  message("known clusters found: ", paste(v.gc_validated[which(v.gc_validated %in% v.gcs_predicted)],collapse = ", "))
   
   
+  message("plot functionality maps")
   
-  print(v.gc_validated[which(v.gc_validated %in% v.gcs_predicted)])
+  v.conditionGroups = names(tb.condition_treatments)
+  v.tissueGroups = names(tb.condition_tissues)
   
-  message("plot functionality map")
-  
-  # m.functionality <- m.functionality[rowSums(m.functionality) > 0, colSums(m.functionality) > 0]
-  
-  
+  m.functionality = matrix(0, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups) + 1, dimnames = list(v.conditionGroups, c(v.tissueGroups, "non specific")) )
   m.functionality <- m.functionality[sort(rownames(m.functionality)),]
   
   m.availability = matrix(-1, nrow = nrow(m.functionality), ncol = ncol(m.functionality), dimnames = list(rownames(m.functionality), colnames(m.functionality)))
-  for(i in 1:nrow(df.experiment_condition_annotation)){
-    if(df.experiment_condition_annotation$condition_treatment_1[i] != ""){
-      m.availability[df.experiment_condition_annotation$condition_treatment_1[i], df.experiment_condition_annotation$condition_tissue[i]] = 1
+  for(x in 1:nrow(df.experiment_condition_annotation)){
+    if(df.experiment_condition_annotation$condition_treatment_1[x] != ""){
+      m.availability[df.experiment_condition_annotation$condition_treatment_1[x], df.experiment_condition_annotation$condition_tissue[x]] = 1
     }
-    if(df.experiment_condition_annotation$condition_treatment_2[i] != ""){
-      m.availability[df.experiment_condition_annotation$condition_treatment_2[i], df.experiment_condition_annotation$condition_tissue[i]] = 1
+    if(df.experiment_condition_annotation$condition_treatment_2[x] != ""){
+      m.availability[df.experiment_condition_annotation$condition_treatment_2[x], df.experiment_condition_annotation$condition_tissue[x]] = 1
     }
   }
   
   
-  for(i in 1:nrow(m.availability)){
-    for(j in 1:ncol(m.availability)){
-      if(colnames(m.functionality)[j] != "nonspecific"){
-        if(m.availability[i,j] == -1){
-          m.functionality[i,j] = -1
-        }  
+  if(length(v.gcs_predicted) > 0){
+    
+    for(i in 1:length(v.gcs_predicted)){
+      
+      df.cluster_annotations.i = subset(df.cluster_annotations, df.cluster_annotations$cluster.ID == v.gcs_predicted[i])
+ 
+      m.functionality.i = matrix(1, nrow = length(v.conditionGroups), ncol = length(v.tissueGroups) + 1, dimnames = list(v.conditionGroups, c(v.tissueGroups, "non specific")) )
+      m.functionality.i <- m.functionality.i[sort(rownames(m.functionality.i)),]
+      
+      for(j in 1:nrow(df.cluster_annotations.i)){
+        
+        condition = as.character(df.cluster_annotations.i$condition[j])
+        tissue = as.character(df.cluster_annotations.i$tissue[j])
+        pval = as.numeric(df.cluster_annotations.i$p.cluster[j])
+        
+        m.functionality.i[condition,tissue] = pval
+      }  
+      
+      
+      m.tmp = m.functionality.i
+      
+      for(x in 1:nrow(m.availability)){
+        for(y in 1:ncol(m.availability)){
+          if(colnames(m.availability)[y] != "non specific"){
+            if(m.availability[x,y] == -1){
+              m.tmp[x,y] = -1
+            }  
+          }
+        }
+      }
+      m.tmp[m.tmp == -1] = NA
+      
+      m.heatmap <- m.tmp[sort(rownames(m.tmp)),]
+      m.heatmap <- t(m.heatmap) #  m.MR # * m.regulatorActivity.pvalue
+      
+      m.rank <- - log(m.heatmap)
+      
+      # breaks = c( 1, seq(0.05, min(m.heatmap[!is.na(m.heatmap)]),-0.0001))
+      
+ 
+      
+      # breaks = c( 1, seq(0.05, min(m.heatmap[!is.na(m.heatmap)]),-0.0001))
+      # 
+      # break_map = unique(as.numeric(m.heatmap))
+      # names(break_map) = unique(as.numeric(m.rank))
+      # break_map = break_map[!is.na(break_map)]
+      # 
+      # break_map = break_map[order(-break_map)]
+      # 
+      # breaks = as.numeric(names(break_map))
+      # legend_labels = as.character(break_map)
+      # 
+  
+      legend_breaks = c(0, 2, -log(0.001), -log(1e-10))
+      legend_labels = c(">0.05","<0.05", "<0.001", "<1e-10")
+      
+      
+      inc = 1
+
+      breaks = c(seq(0, floor(max(m.rank[!is.na(m.rank)]) + 1), inc))
+      color <- c( "black",  "yellow" ,colorRampPalette(c( "yellow", "yellow", "blue",  "blue"))(length(breaks) - 1))
+      
+      # plot pdf 3.5 - 9
+      p = pheatmap(m.rank, color = color, breaks = breaks, legend_breaks = legend_breaks, legend_labels = legend_labels, border_color = "black",  show_rownames = T, show_colnames = T , cluster_rows = F, cluster_cols = F, treeheight_row = 0, treeheight_col = 0,
+                   main = "Colors indicate the significance of the cluster to be active per condition and tissue. \n (Gray tiles indicate condition-tissue combinations not present in the expression dataset)",
+                   fontsize = fontsize, fontsize_row = fontsize_row, fontsize_col = fontsize_col,
+                   silent = T)
+      
+      save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", v.gcs_predicted[i],".pdf", sep = ""),  width=heatmap_height, height= heatmap_width )
+      
+    }
+    
+    
+    # global
+    for(j in 1:nrow(df.cluster_annotations)){
+      
+      condition = as.character(df.cluster_annotations$condition[j])
+      tissue = as.character(df.cluster_annotations$tissue[j])
+      
+      m.functionality[condition,tissue] = m.functionality[condition,tissue] + 1
+    }  
+    
+    
+    for(i in 1:nrow(m.availability)){
+      for(j in 1:ncol(m.availability)){
+        if(colnames(m.functionality)[j] != "non specific"){
+          if(m.availability[i,j] == -1){
+            m.functionality[i,j] = -1
+          }  
+        }
       }
     }
+    
+    m.functionality[m.functionality == -1] = NA
+    
+    m.heatmap <- m.functionality # t(m.functionality) #  m.MR # * m.regulatorActivity.pvalue
+    
+    breaks = c( 0, 1, seq(2,max(m.heatmap[!is.na(m.heatmap)]),1))
+    color <- c( "black",  "orange" ,colorRampPalette(c( "orange", "red"))(length(breaks) - 1))
+    
+    # plot pdf 3.5 - 9
+    p = pheatmap(m.heatmap, color = color, breaks = breaks, border_color = "orange",  show_rownames = T, show_colnames = T , cluster_rows = F, cluster_cols = F, treeheight_row = 0, treeheight_col = 0,
+                 main = "Gene cluster condition functionality map \n (colors indicate numbers of clusters active per condition)",
+                 fontsize = fontsize, fontsize_row = fontsize_row, fontsize_col = fontsize_col,
+                 silent = T)
+    
+    
+    save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_number_of_clusters.pdf", sep = ""), width=heatmap_width, height=heatmap_height)
+    
+    
   }
   
-  m.functionality[m.functionality == -1] = NA
-  
-  m.heatmap <- t(m.functionality) #  m.MR # * m.regulatorActivity.pvalue
-  
-  breaks = c( 0, 1, seq(2,max(m.heatmap[!is.na(m.heatmap)]),1))
-  color <- c( "black",  "orange" ,colorRampPalette(c( "orange", "red"))(length(breaks) - 1))
-  
-  # plot pdf 3.5 - 9
-  p = pheatmap(m.heatmap, color = color, breaks = breaks, border_color = "orange",  show_rownames = T, show_colnames = T , cluster_rows = F, cluster_cols = F, treeheight_row = 0, treeheight_col = 0,
-               main = "Gene cluster condition functionality map \n (colors indicate numbers of clusters active per condition)")#fontsize = 1)
-  
-  
-  save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_number_of_clusters.pdf", sep = ""), width=heatmap_width, height=heatmap_height)
-  
-  
+
+                       
 }
 
 

@@ -7,7 +7,7 @@
 run_METACLUSTER(m.foldChange_differentialExpression,
   m.pvalue_differentialExpression, df.experiment_condition_annotation,
   df.geneCluster, tb.condition_treatments, tb.condition_tissues,
-  n.cpus = 3,
+  n.cpus = 1,
   b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
   pvalue_DifferentialExpression = 0.05,
   probability_codifferentialExpression_MonteCarloSimulation = 0.95,
@@ -16,8 +16,6 @@ run_METACLUSTER(m.foldChange_differentialExpression,
   pvalue_geneClusterConsistency = 0.05,
   pvalue_treatment_per_condition = 0.05,
   pvalue_tissue_per_condition = 0.05,
-  th.consistent_condition_presence_percentage = 0.7,
-  min_number_of_genes = 3,
   number_codifferentialExpression_MonteCarloSimulations = 3,
   number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
   min_number_condition_samples = 1, seed = 1234, heatmap_width = 10,
@@ -37,7 +35,7 @@ run_METACLUSTER(m.foldChange_differentialExpression,
 
 \item{tb.condition_tissues}{table of tissues}
 
-\item{n.cpus}{number of cores used}
+\item{n.cpus}{number of cores used (default = 1)}
 
 \item{b.load_codifferentialAnalysis_monteCarloSimulation}{load codifferential expression data ("yes", "no")}
 
@@ -55,11 +53,7 @@ run_METACLUSTER(m.foldChange_differentialExpression,
 
 \item{pvalue_tissue_per_condition}{pvalue gene pair tissue annotation (default = 0.05)}
 
-\item{th.consistent_condition_presence_percentage}{percentage of gene cluster enyzmes that are expressed in each condition in order to annotate the condition to the cluster (default = 0.7}
-
-\item{min_number_of_genes}{min number of enzymes per gene cluster (default = 3)}
-
-\item{number_codifferentialExpression_MonteCarloSimulations}{number of codiffernetial expression background monte carlo simulations (default = 3)}
+\item{number_codifferentialExpression_MonteCarloSimulations}{number of codiffernetial expression background monte carlo simulations (default = 1)}
 
 \item{number_conditionSpecificCoexpressionBackgroundGenePairs}{number of context specific coexpression simulation background gene pairs (default = 50)}
 
@@ -76,6 +70,8 @@ run_METACLUSTER(m.foldChange_differentialExpression,
 \item{v.conditionGroups}{treatment and condition map}
 
 \item{v.tissueGroups}{tissue maps}
+
+\item{th.consistent_condition_presence_percentage}{percentage of gene cluster enyzmes that are expressed in each condition in order to annotate the condition to the cluster (default = 0.7}
 }
 \value{
 a list of results
@@ -92,46 +88,45 @@ setwd(...)
 
 
 message("load datasets")
-l.data = load_datasets(input_format = "PCF2017",
+l.data = load_datasets(input_format = "PCF2017_enzymes_only",
                        filename.genes = "data/genes.txt",
-                       filename.experiment_series_ids = "data/experiment_series_ids.txt",
+                       filename.experiment_ids = "data/experiment_ids.txt",
                        filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
                        filename.foldChange_differentialExpression = "data/m.foldChange_differentialExpression.txt",
                        filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
-                       filename.experiment_condition_tissue_annotation ="data/df.experiment_condition_annotation.txt")
+                       filename.experiment_condition_tissue_annotation ="data/experiment_annotation.txt")
 
 message("run METACLUSTER")
-l.results = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldChange_differentialExpression,
-                            m.pvalue_differentialExpression = l.data$m.pvalue_differentialExpression,
-                            df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
-                            df.geneCluster = l.data$df.geneCluster,
-                            tb.condition_treatments = l.data$tb.condition_treatments,
-                            tb.condition_tissues = l.data$tb.condition_tissues,
-                            n.cpus = 3,
-                            b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
-                            pvalue_DifferentialExpression = 0.05,
-                            probability_codifferentialExpression_MonteCarloSimulation = 0.95,
-                            pvalue_coexpression_distribution = 0.05,
-                            pvalue_geneClusterPrediction = 0.05,
-                            pvalue_geneClusterConsistency = 0.05,
-                            pvalue_treatment_per_condition = 0.05,
-                            pvalue_tissue_per_condition = 0.05,
-                            th.consistent_condition_presence_percentage = 0.7,
-                            min_number_of_genes = 3,
-                            number_codifferentialExpression_MonteCarloSimulations = 3,
-                            number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
-                            min_number_condition_samples = 1,
-                            seed = 1234,
-                            heatmap_width = 10, 
-                            heatmap_height = 5,
-                            foldername.tmp = "tmp/", 
-                            foldername.results = "results/")
-                            
-print(head(l.results$df.cluster_annotations))
+df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldChange_differentialExpression,
+                                         m.pvalue_differentialExpression = l.data$m.pvalue_differentialExpression,
+                                         df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
+                                         df.geneCluster = l.data$df.geneCluster,
+                                         tb.condition_treatments = l.data$tb.condition_treatments,
+                                         tb.condition_tissues = l.data$tb.condition_tissues,
+                                         n.cpus = 3,
+                                         b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
+                                         pvalue_DifferentialExpression = 0.05,
+                                         probability_codifferentialExpression_MonteCarloSimulation = 0.95,
+                                         pvalue_coexpression_distribution = 0.05,
+                                         pvalue_geneClusterPrediction = 0.05,
+                                         pvalue_geneClusterConsistency = 0.05,
+                                         pvalue_treatment_per_condition = 0.05,
+                                         pvalue_tissue_per_condition = 0.05,
+                                         number_codifferentialExpression_MonteCarloSimulations = 1,
+                                         number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
+                                         min_number_condition_samples = 1,
+                                         seed = 1234,
+                                         heatmap_width = 10,
+                                         heatmap_height = 5,
+                                         foldername.results = "results/",
+                                         foldername.tmp = "tmp/")
 
-evaluate_and_store_results(df.cluster_annotations=l.results$df.cluster_annotations,
+
+evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
                            df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
-                           m.functionality=l.results$m.functionality, 
-                           heatmap_width = 10, heatmap_height = 5,
+                           tb.condition_treatments = l.data$tb.condition_treatments,
+                           tb.condition_tissues = l.data$tb.condition_tissues,
+                           min_number_of_genes = 3,
+                           heatmap_width = 4, heatmap_height = 7, fontsize = 7, fontsize_row = 10, fontsize_col = 10,
                            foldername.results = "results/")
 }

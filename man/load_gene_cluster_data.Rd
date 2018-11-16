@@ -5,12 +5,12 @@
 \title{Load gene cluster Function}
 \usage{
 load_gene_cluster_data(filename.geneCluster = "",
-  input_format = "PCF2017")
+  input_format = "PCF2017_enzymes_only")
 }
 \arguments{
 \item{filename.geneCluster}{includes gene cluster filenames as well as the input}
 
-\item{input_format}{format of plant cluster finder (PCF2017) or custom}
+\item{input_format}{format of plant cluster finder (PCF2017_enzymes_only), PCF2017 or custom}
 }
 \description{
 This function loads gene cluster information
