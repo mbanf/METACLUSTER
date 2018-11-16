@@ -1,7 +1,7 @@
- # METACLUSTER - an R package for context-specific functionality analysis of metabolic gene clusters
+ # METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters
  
  ## About
- METACLUSTER facilitates comprehensive condition and tissue-specific functionality analysis of metabolic gene clusters based on a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information
+ METACLUSTER facilitates comprehensive condition and tissue-specific expression analysis of metabolic gene clusters based on a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information
  
   ![Alt text](/figure1.jpg?raw=true "functionality map")
  A) The METACLUSTER framework. B) Cluster diagram and transcriptional activity map of the arabidiol/baruol cluster (Yu et al. 2016) (C463 based on the prediction in Schlapfer et al. 2017). Colors indicate the inferred p-value of the cluster to be transcriptionally active per condition and tissue. Gray tiles indicate condition-tissue combinations that are missing in the differential expression dataset. C) Transcriptional activity map of the 317 inferred context-specific gene clusters. Color values denote the number of the transcriptionally active gene clusters per condition-tissue. Black tiles indicate condition-tissue combinations with no inferred transcriptionally active clusters.
@@ -37,20 +37,20 @@
  
  * `input_format` "custom", "PCF2017_enzymes_only" or "PCF2017" (default = "PCF2017_enzymes_only")
  * `filename.genes` genes (rows of the expression datasets)
- * `filename.experiment_series_ids` experimental datasets (columns of the expression datasets)
+ * `filename.experiment_ids` experimental datasets (columns of the expression datasets)
  * `filename.geneCluster` filename gene clusters
  * `filename.foldChange_differentialExpression` differential expression data (fold changes)
  * `filename.pvalue_differentialExpression`  differential expression data (p-values)
  * `filename.experiment_condition_tissue_annotation` experiment to treatment and tissue annotation
  
  ```
- l.data = load_datasets(input_format = "PCF2017_enzymes_only",
-                        filename.genes = "data/genes.txt",
-                        filename.experiment_series_ids = "data/experiment_series_ids.txt",
-                        filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
-                        filename.foldChange_differentialExpression = "data/m.foldChange_differentialExpression.txt",
-                        filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
-                        filename.experiment_condition_tissue_annotation ="data/df.experiment_condition_annotation.txt")
+l.data = load_datasets(input_format = "PCF2017_enzymes_only",
+                       filename.genes = "data/genes.txt",
+                       filename.experiment_ids = "data/experiment_ids.txt",
+                       filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
+                       filename.foldChange_differentialExpression = "data/m.foldChange_differentialExpression.txt",
+                       filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
+                       filename.experiment_condition_tissue_annotation ="data/experiment_annotation.txt")
  ```
  
  METACLUSTER Parameter sets:
@@ -81,47 +81,42 @@
  
  ```
 df.cluster_annotations = run_METACLUSTER(m.foldChange_differentialExpression = l.data$m.foldChange_differentialExpression,
-                             m.pvalue_differentialExpression = l.data$m.pvalue_differentialExpression,
-                             df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
-                             df.geneCluster = l.data$df.geneCluster,
-                             tb.condition_treatments = l.data$tb.condition_treatments,
-                             tb.condition_tissues = l.data$tb.condition_tissues,
-                             n.cpus = 3,
-                             b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
-                             pvalue_DifferentialExpression = 0.05,
-                             probability_codifferentialExpression_MonteCarloSimulation = 0.95,
-                             pvalue_coexpression_distribution = 0.05,
-                             pvalue_geneClusterPrediction = 0.05,
-                             pvalue_geneClusterConsistency = 0.05,
-                             pvalue_treatment_per_condition = 0.05,
-                             pvalue_tissue_per_condition = 0.05,
-                             number_codifferentialExpression_MonteCarloSimulations = 1,
-                             number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
-                             min_number_condition_samples = 1,
-                             seed = 1234,
-                             heatmap_width = 10,
-                             heatmap_height = 5,
-                             foldername.results = "results/",
-                             foldername.tmp = "tmp/")
+                                        m.pvalue_differentialExpression = l.data$m.pvalue_differentialExpression,
+                                        df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
+                                        df.geneCluster = l.data$df.geneCluster,
+                                        tb.condition_treatments = l.data$tb.condition_treatments,
+                                        tb.condition_tissues = l.data$tb.condition_tissues,
+                                        n.cpus = 3,
+                                        b.load_codifferentialAnalysis_monteCarloSimulation = "yes",
+                                        pvalue_DifferentialExpression = 0.05,
+                                        probability_codifferentialExpression_MonteCarloSimulation = 0.95,
+                                        pvalue_coexpression_distribution = 0.05,
+                                        pvalue_geneClusterPrediction = 0.05,
+                                        pvalue_geneClusterConsistency = 0.05,
+                                        pvalue_treatment_per_condition = 0.05,
+                                        pvalue_tissue_per_condition = 0.05,
+                                        number_codifferentialExpression_MonteCarloSimulations = 1,
+                                        number_conditionSpecificCoexpressionBackgroundGenePairs = 100,
+                                        min_number_condition_samples = 1,
+                                        seed = 1234,
+                                        heatmap_width = 10,
+                                        heatmap_height = 5,
+                                        foldername.results = "results/",
+                                        foldername.tmp = "tmp/")
  ```
  
  Next evaluate and store the results
  ```
- evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
-                            df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
-                            m.functionality=l.results$m.functionality, 
-                            heatmap_width = 10, heatmap_height = 5,
-                            foldername.results = "results/")
+evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
+                           df.experiment_condition_annotation = l.data$df.experiment_condition_annotation,
+                           tb.condition_treatments = l.data$tb.condition_treatments,
+                           tb.condition_tissues = l.data$tb.condition_tissues,
+                           min_number_of_genes = 3,
+                           heatmap_width = 4, heatmap_height = 7, fontsize = 7, fontsize_row = 10, fontsize_col = 10,
+                           foldername.results = "results/")
+
  ```
  
- 
- 
- 
- 
- 
-
- ![Alt text](/C615.png?raw=true "coexpression map")
- Context specific functionality map inferred by METACLUSTER of the C615, i.e. marneral (see Field et al., 2011), from Schlapfer et al. 2017. Colors indicate the rank if the cluster to be active per condition and tissue. Gray tiles indicate condition tissuecombinations not present in the expression dataset
  ## Notes
  
  Installation of devtools dependencies under Ubuntu (prior to installing devtools):
