@@ -123,7 +123,7 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
  sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
  
  
- Custom gene cluster data format:  "Cluster.ID", "Gene.ID", "Gene.Name", (see custom_example_data.txt)
+ Custom gene cluster data format:  "Cluster.ID", "Gene.ID", "Gene.Name", see [custom_example_data](https://1drv.ms/t/s!Avm82Xhe9EZj4wVPMoWIubwiA9uI)
 
 
  
