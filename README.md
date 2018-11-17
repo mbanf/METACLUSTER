@@ -16,7 +16,14 @@
  
  ```
  library(devtools)
+ 
+ # on Windows or linux
  install_github("https://github.com/mbanf/METACLUSTER")
+ 
+ # on Mac
+ install_github("METACLUSTER","mbanf")
+ 
+ 
  ```
  
  ## Usage
