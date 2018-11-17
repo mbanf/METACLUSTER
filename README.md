@@ -129,6 +129,7 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
  Installation of devtools dependencies under Ubuntu (prior to installing devtools):
  sudo apt-get install build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
  
+ Then install.packages("devtools")
  
  Custom gene cluster data format:  "Cluster.ID", "Gene.ID", "Gene.Name", see [custom_example_data](https://1drv.ms/t/s!Avm82Xhe9EZj4wVPMoWIubwiA9uI)
 
