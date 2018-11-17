@@ -17,10 +17,9 @@
  ```
  library(devtools)
  
- # on Windows or linux
+ # depending on your system (Windows, Mac or linux) please use
  install_github("https://github.com/mbanf/METACLUSTER")
- 
- # on Mac
+ # or
  install_github("METACLUSTER","mbanf")
  
  
