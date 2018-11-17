@@ -229,8 +229,7 @@ load_gene_cluster_data = function(filename.geneCluster = "",
     if(!all(v.colnames_mandatory %in% names(df.geneCluster))){
       stop(paste("error: could not find all mandatory columns in file:", paste(v.colnames_mandatory, collapse = ", ")))
     }
-  }
-  if(format == "PCF2017" | format == "PCF2017_enzymes_only"){
+  }else if(format == "PCF2017" | format == "PCF2017_enzymes_only"){
     # FORMAT the gene cluster file
     df.geneCluster <- read.table(filename.geneCluster, sep = "\t", header = FALSE, skip = 1, fill = T, stringsAsFactors = FALSE, quote = "")
     if(nrow(df.geneCluster) == 0){
@@ -247,7 +246,7 @@ load_gene_cluster_data = function(filename.geneCluster = "",
     }
     
   }else{
-    stop(paste("error: gene cluster format needs to be \"PCF2017\" or \"custom\" ", sep = ""))
+    stop(paste("error: gene cluster format needs to be \"PCF2017\" or \"custom\" or \"PCF2017_enzymes_only\" ", sep = ""))
   }
   
   return(df.geneCluster)
