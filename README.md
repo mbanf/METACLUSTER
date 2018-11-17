@@ -16,7 +16,7 @@
  
  ```
  library(devtools)
- install_github("METACLUSTER","mbanf")
+ install_github("https://github.com/mbanf/METACLUSTER")
  ```
  
  ## Usage
