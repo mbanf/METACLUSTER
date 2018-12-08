@@ -8,7 +8,7 @@
  
  
  
- [Contact](mailto:mbanf.research@gmail.com) in case you've found a bug. 
+ [Contact](mailto:michael@junkdna.ai) for questions.
  
  ## Installation
  
