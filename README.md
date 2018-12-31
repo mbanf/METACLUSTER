@@ -131,4 +131,7 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
  Custom gene cluster data format:  "Cluster.ID", "Gene.ID", "Gene.Name", see [custom_example_data](https://1drv.ms/t/s!Avm82Xhe9EZj4wVPMoWIubwiA9uI)
 
 
+## References
+
+Banf M, Zhao K.M., and Rhee S.  METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters. accepted in Bioinformatics
  
