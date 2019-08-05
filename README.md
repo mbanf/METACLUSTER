@@ -37,15 +37,15 @@
  
  ```
  
- Load datasets parameters:
+ Load individual datasets based on their filenames:
  
  * `input_format` "custom", "PCF2017_enzymes_only" or "PCF2017" (default = "PCF2017_enzymes_only")
- * `filename.genes` genes (rows of the expression datasets)
- * `filename.experiment_ids` experimental datasets (columns of the expression datasets)
- * `filename.geneCluster` filename gene clusters
- * `filename.foldChange_differentialExpression` differential expression data (fold changes)
- * `filename.pvalue_differentialExpression`  differential expression data (p-values)
- * `filename.experiment_condition_tissue_annotation` experiment to treatment and tissue annotation
+ * `genes` a list of genes (corresponds to the rows of the differential expression datasets)
+ * `experiment_ids` a list of unique identifiers referencing individual condition-tissue specific differential expression experiments listed in experiment_condition_tissue_annotation (corrresponding to the columns of the differential expression datasets)
+ * `geneCluster` the gene clusters dataset
+ * `foldChange_differentialExpression` differential expression data (fold changes) as a genes x differential expression experiments 
+ * `pvalue_differentialExpression`  differential expression data (p-values) as a genes x differential expression experiments 
+ * `experiment_condition_tissue_annotation` experiment to treatment and tissue annotation (with corresponding experiment_ids)
  
  ```
 l.data = load_datasets(input_format = "PCF2017_enzymes_only",
