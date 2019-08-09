@@ -135,3 +135,5 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
 
 Banf M, Zhao K.M., and Rhee S.  METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters,  Bioinformatics, 2019
  
+Genome-wide prediction of metabolic enzymes, pathways, and gene clusters in plants, 
+Schläpfer P, Zhang P, Wang C, Kim T, Banf M, Chae L, Dreher K, Chavali A K, Nilo-Poyanco, Bernhard T, Kahn D, and Rhee S.  - Plant physiology, 2017
