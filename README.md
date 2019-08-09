@@ -133,5 +133,5 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
 
 ## References
 
-Banf M, Zhao K.M., and Rhee S.  METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters. accepted in Bioinformatics
+Banf M, Zhao K.M., and Rhee S.  METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters,  Bioinformatics, 2019
  
