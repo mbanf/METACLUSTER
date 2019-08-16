@@ -40,18 +40,18 @@
  Load individual datasets based on their filenames:
  
  * `input_format` "custom", "PCF2017_enzymes_only" or "PCF2017" (default = "PCF2017_enzymes_only")
- * `genes` a list of genes (corresponds to the rows of the differential expression datasets)
- * `experiment_ids` a list of unique identifiers referencing individual condition-tissue specific differential expression experiments listed in experiment_condition_tissue_annotation (corrresponding to the columns of the differential expression datasets)
  * `geneCluster` the gene clusters dataset
+ * `genes` a list of genes (corresponds to the rows of the differential expression datasets)
+ * `sample_ids_differentialExpression` a list of unique identifiers referencing individual condition-tissue specific differential expression experiments 
  * `foldChange_differentialExpression` differential expression data (fold changes) as a genes x differential expression experiments 
  * `pvalue_differentialExpression`  differential expression data (p-values) as a genes x differential expression experiments 
  * `experiment_condition_tissue_annotation` experiment to treatment and tissue annotation (with corresponding experiment_ids)
  
  ```
 l.data = load_datasets(input_format = "PCF2017_enzymes_only",
-                       filename.genes = "data/genes.txt",
-                       filename.experiment_ids = "data/experiment_ids.txt",
                        filename.geneCluster = "data/ath_geneInCluster_3_aracyc.txt-labeled_NoHypoGenes.txt",
+                       filename.genes = "data/genes.txt",
+                       filename.sample_ids_differentialExpression = "data/sample_ids_differentialExpression.txt",
                        filename.foldChange_differentialExpression = "data/m.foldChange_differentialExpression.txt",
                        filename.pvalue_differentialExpression =	"data/m.pvalue_differentialExpression.txt",
                        filename.experiment_condition_tissue_annotation ="data/experiment_annotation.txt")
@@ -129,6 +129,16 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
  Then install.packages("devtools")
  
  Custom gene cluster data format:  "Cluster.ID", "Gene.ID", "Gene.Name", see [custom_example_data](https://1drv.ms/t/s!Avm82Xhe9EZj4wVPMoWIubwiA9uI)
+
+ as a pre-requisite, our algorithm needs two matrices: m.pvalue_differentialExpression and m.foldChange_differentialExpression.
+ 
+ * `genes` a list of genes (corresponds to the rows of the differential expression datasets)
+ * `sample_ids_differentialExpression` a list of unique identifiers referencing individual condition-tissue specific differential expression experiments listed in experiment_condition_tissue_annotation (corrresponding to the columns of the differential expression datasets)
+ 
+Both matrices have been precalculated and stored, using write.table, in order to preserve both row- and column names:
+write.table(m.foldChange_differentialExpression, "data/m.foldChange_differentialExpression.txt", row.names = T, col.names = T)
+
+Accordingly, your format should match, use in order to store matrices... 
 
 
 ## References
