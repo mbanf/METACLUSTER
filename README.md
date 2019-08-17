@@ -149,6 +149,5 @@ Genome-wide prediction of metabolic enzymes, pathways, and gene clusters in plan
 Schläpfer P, Zhang P, Wang C, Kim T, Banf M, Chae L, Dreher K, Chavali A K, Nilo-Poyanco, Bernhard T, Kahn D, and Rhee S.  - Plant physiology, 2017
 
 <img src="./CSlogo.png" height="50">  
-
-<img src="./logo_eg.png" height="200">
+<img src="./logo_eg.png" height="250">
 
