@@ -1,6 +1,8 @@
  # METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters
  
  ## About
+ [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
+ 
  METACLUSTER facilitates comprehensive condition and tissue-specific expression analysis of metabolic gene clusters based on a probabilistic framework for characterizing metabolic gene clusters using context-specific gene expression information
  
   ![Alt text](/figure1.jpg?raw=true "functionality map")
