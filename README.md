@@ -1,6 +1,6 @@
  # METACLUSTER - an R package for context-specific expression analysis of metabolic gene clusters
  
-  Check out our hands-on tutorial on  <a href="https://www.youtube.com/channel/UCCGoY53fTAKnAYJg7XEAIGg?view_as=subscriber"><img src="youtube.png" height="20 "/></a>
+  Check out our hands-on tutorial on  <a href="https://www.youtube.com/channel/UCCGoY53fTAKnAYJg7XEAIGg?view_as=subscriber"><img src="youtube.png" height="30 "/></a>
  
  ## About 
  
