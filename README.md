@@ -8,7 +8,7 @@
  
  
  
- [Contact](mailto:michael@junkdna.ai) for questions.
+ [Contact](mailto:michael@educatedguess.ai) for questions.
  
  ## Installation
  
@@ -147,3 +147,9 @@ Banf M, Zhao K.M., and Rhee S.  METACLUSTER - an R package for context-specific 
  
 Genome-wide prediction of metabolic enzymes, pathways, and gene clusters in plants, 
 Schläpfer P, Zhang P, Wang C, Kim T, Banf M, Chae L, Dreher K, Chavali A K, Nilo-Poyanco, Bernhard T, Kahn D, and Rhee S.  - Plant physiology, 2017
+
+
+
+ ![Alt text](/CSlogo.png?raw=true "functionality map")
+ 
+  ![Alt text](/logo_eg.png?raw=true "functionality map")
