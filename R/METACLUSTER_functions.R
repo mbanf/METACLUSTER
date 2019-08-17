@@ -114,7 +114,7 @@ install_and_load_libraries <- function(){
 #' This function loads a datasets
 #' @param input_format "custom" or "PCF2017" (default = "PCF2017")
 #' @param filename.genes genes (rows of the expression datasets)
-#' @param filename.experiment_series_ids experimental datasets (columns of the expression datasets)
+#' @param filename.sample_ids_differentialExpression experimental datasets (columns of the expression datasets)
 #' @param filename.geneCluster filename gene clusters
 #' @param filename.foldChange_differentialExpression differential expression data (fold changes)
 #' @param filename.pvalue_differentialExpression  differential expression data (p-values)
@@ -125,7 +125,7 @@ install_and_load_libraries <- function(){
 #' load_datasets()
 load_datasets = function(input_format = "PCF2017",
                          filename.genes = "",
-                         filename.experiment_ids = "",
+                         filename.sample_ids_differentialExpression  = "",
                          filename.geneCluster = "",
                          filename.foldChange_differentialExpression = "",
                          filename.pvalue_differentialExpression =	"",
@@ -135,7 +135,7 @@ load_datasets = function(input_format = "PCF2017",
   df.geneCluster = load_gene_cluster_data(filename.geneCluster=filename.geneCluster, input_format=input_format)
   
   genes = read.table(filename.genes, header = F, sep = "\t", stringsAsFactors = F)[,1]
-  experiment_series_ids = read.table(filename.experiment_ids, header = F, sep = "\t", stringsAsFactors = F)[,1]
+  experiment_series_ids = read.table(filename.sample_ids_differentialExpression, header = F, sep = "\t", stringsAsFactors = F)[,1]
   experiment_series_ids = as.character(experiment_series_ids)
   
   df.annotation = read.table(filename.experiment_condition_tissue_annotation, sep = "\t", stringsAsFactors = F, header = T)
