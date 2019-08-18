@@ -139,10 +139,7 @@ evaluate_and_store_results(df.cluster_annotations=df.cluster_annotations,
  * `genes` a list of genes (corresponds to the rows of the differential expression datasets)
  * `sample_ids_differentialExpression` a list of unique identifiers referencing individual condition-tissue specific differential expression experiments listed in experiment_condition_tissue_annotation (corrresponding to the columns of the differential expression datasets)
  
-Both matrices have been precalculated and stored, using write.table, in order to preserve both row- and column names:
-write.table(m.foldChange_differentialExpression, "data/m.foldChange_differentialExpression.txt", row.names = T, col.names = T)
-
-Accordingly, your format should match, use in order to store matrices... 
+The format of the experimental annotation should be: "series_id"	"condition_treatment_1"	"condition_treatment_2"	"condition_tissue"	"unique_ID".
 
 
 ## References
