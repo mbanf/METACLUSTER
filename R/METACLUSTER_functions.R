@@ -94,6 +94,10 @@ perform_significance_tests = function(df.cluster_annotations,
 #' install_and_load_libraries()
 install_and_load_libraries <- function(){
   
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+  BiocManager::install("multtest")
+  
   list.of.packages <- c("metap", "reshape2","doParallel", "pheatmap", "foreach")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
   if(length(new.packages)) install.packages(new.packages)
