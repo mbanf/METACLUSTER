@@ -219,6 +219,9 @@ estimate_cluster_coexpression <- function(m.fc,
           # rho <- cor.test(expr.g1,expr.g2) # 
           # if(rho$p.value <= th.rho_prob)
           rho <- (cor(expr.g1, expr.g2)) # pearson correlation 
+          if(is.na(rho)){
+            rho <- 0
+           }
           # if th.min_overlap smaller - use rho for additional statistical analysis ( distribution) 
           v.rho.gene_pairs[j] <- as.numeric(rho) # 
           
@@ -237,6 +240,9 @@ estimate_cluster_coexpression <- function(m.fc,
               expr.g1 <- m.fc[g.sim[1], s.sim]
               expr.g2 <- m.fc[g.sim[2], s.sim]
               rho <- cor(expr.g1, expr.g2)
+              if(is.na(rho)){
+                rho <- 0
+               }
               v.rho_random.gene_pairs.j[k] <- rho
             }
             v.rho_random.gene_pairs <- c(v.rho_random.gene_pairs, v.rho_random.gene_pairs.j)
