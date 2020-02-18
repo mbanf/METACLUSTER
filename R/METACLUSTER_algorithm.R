@@ -761,12 +761,6 @@ run_METACLUSTER = function(m.foldChange_differentialExpression,
                            foldername.results = "results/"){
 
   
-  message("checking dependencies...")
-  
-  if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-  BiocManager::install("multtest")
-  
   list.of.packages <- c("reshape2", "foreach", "doParallel", "pheatmap", "metap")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
   if(length(new.packages)){
