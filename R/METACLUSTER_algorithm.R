@@ -761,6 +761,8 @@ run_METACLUSTER = function(m.foldChange_differentialExpression,
                            foldername.results = "results/"){
 
   
+  message("checking dependencies...")
+  
   if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
   BiocManager::install("multtest")
