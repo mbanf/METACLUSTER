@@ -16,16 +16,16 @@
  
  ## Installation
  
- `METACLUSTER` was build based on R version 3.4.3. The easiest way to install `METACLUSTER` is through `devtools` (see OS specific notes on installing devtools at the end)
+ `METACLUSTER` is based on R version 3.6.1. The easiest way to install `METACLUSTER` is through `devtools` (see OS specific notes on installing devtools at the end)
  
  ```
  library(devtools)
  
- # depending on your system (Windows, Mac or linux) please use
- install_github("https://github.com/mbanf/METACLUSTER")
- # or
- install_github("METACLUSTER","mbanf")
- 
+install_github("https://github.com/mbanf/METACLUSTER", build_vignettes=TRUE,
+  repos=c("http://cran.rstudio.org", "http://bioconductor.org/packages/release/bioc"),
+  dependencies=TRUE)
+
+
  
  ```
  
