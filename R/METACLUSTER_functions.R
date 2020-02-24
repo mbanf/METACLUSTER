@@ -418,7 +418,7 @@ evaluate_and_store_results = function(df.cluster_annotations,
                    silent = T)
       
       save_pheatmap_pdf(p, paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", v.gcs_predicted[i],".pdf", sep = ""),  width=heatmap_height, height= heatmap_width )
-      message("map written to:", paste(foldername.results, "/condition_activity_number_of_clusters.pdf", sep = ""))
+      message("map written to:", paste(foldername.results, "/condition_activity_per_cluster_heatmaps/", v.gcs_predicted[i],".pdf", sep = ""))
     }
     
     
